@@ -342,6 +342,20 @@ function dayIdForDate(d) {
   const map = { 1: "mon", 2: "tue", 3: "wed", 4: "thu", 5: "fri", 6: "sat" };
   return map[dow] || "mon";
 }
+function currentWeekDates() {
+  const now = new Date();
+  const dow = now.getDay();
+  const diffToMonday = dow === 0 ? -6 : 1 - dow;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diffToMonday);
+  const dates = {};
+  SCHEDULE.forEach((d, i) => {
+    const dt = new Date(monday);
+    dt.setDate(monday.getDate() + i);
+    dates[d.id] = { label: dt.toLocaleDateString(undefined, { month: "short", day: "numeric" }), key: formatDateKey(dt) };
+  });
+  return dates;
+}
 function monthGrid(year, month) {
   const firstWeekday = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -425,6 +439,28 @@ function RishiStrengthTracker() {
   const [bestStreak, setBestStreak] = useState(0);
   const [log, setLog] = useState([]);
   const [view, setView] = useState("today");
+
+  // The app can stay open/suspended across midnight (especially as an installed
+  // iOS web app), so "today" needs to be re-checked whenever it becomes active
+  // again, not just computed once when it first loaded.
+  useEffect(() => {
+    function syncToToday() {
+      if (document.visibilityState === "visible") {
+        const real = todayDayId();
+        setDayId((prev) => (prev !== real ? real : prev));
+      }
+    }
+    syncToToday();
+    document.addEventListener("visibilitychange", syncToToday);
+    window.addEventListener("focus", syncToToday);
+    window.addEventListener("pageshow", syncToToday);
+    return () => {
+      document.removeEventListener("visibilitychange", syncToToday);
+      window.removeEventListener("focus", syncToToday);
+      window.removeEventListener("pageshow", syncToToday);
+    };
+  }, []);
+
   const isToday = !overrideDate;
   const dateKey = overrideDate || todayKey();
   const effectiveDayId = overrideDate ? dayIdForDate(/* @__PURE__ */ new Date(overrideDate + "T00:00:00")) : dayId;
@@ -647,17 +683,20 @@ function RishiStrengthTracker() {
     borderRadius: 8,
     padding: "8px 12px",
     marginBottom: 14
-  } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12.5, color: COLORS.focus, fontFamily: "'IBM Plex Mono', monospace" } }, "Viewing ", (/* @__PURE__ */ new Date(dateKey + "T00:00:00")).toLocaleDateString(void 0, { weekday: "short", month: "short", day: "numeric" })), /* @__PURE__ */ React.createElement("button", { onClick: backToToday, style: { background: "transparent", border: `1px solid ${COLORS.focus}`, borderRadius: 5, color: COLORS.focus, fontSize: 11.5, padding: "4px 10px", fontFamily: "'IBM Plex Mono', monospace" } }, "Back to today")), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "baseline", justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("h1", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 26, margin: 0, textTransform: "uppercase" } }, day.label, " \xB7 ", workout.name), streak > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 4, color: COLORS.effort, fontFamily: "'IBM Plex Mono', monospace", fontSize: 13 } }, /* @__PURE__ */ React.createElement(Flame, { size: 14 }), " ", streak)), /* @__PURE__ */ React.createElement("div", { style: { color: CATEGORY_COLOR[workout.category], fontSize: 13, marginTop: 2, fontFamily: "'IBM Plex Mono', monospace" } }, CATEGORY_LABEL[workout.category].toUpperCase())), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 5, marginBottom: 18 } }, SCHEDULE.map((d) => /* @__PURE__ */ React.createElement(
+  } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12.5, color: COLORS.focus, fontFamily: "'IBM Plex Mono', monospace" } }, "Viewing ", (/* @__PURE__ */ new Date(dateKey + "T00:00:00")).toLocaleDateString(void 0, { weekday: "short", month: "short", day: "numeric" })), /* @__PURE__ */ React.createElement("button", { onClick: backToToday, style: { background: "transparent", border: `1px solid ${COLORS.focus}`, borderRadius: 5, color: COLORS.focus, fontSize: 11.5, padding: "4px 10px", fontFamily: "'IBM Plex Mono', monospace" } }, "Back to today")), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "baseline", justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("h1", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 26, margin: 0, textTransform: "uppercase" } }, day.label, " \xB7 ", workout.name), streak > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 4, color: COLORS.effort, fontFamily: "'IBM Plex Mono', monospace", fontSize: 13 } }, /* @__PURE__ */ React.createElement(Flame, { size: 14 }), " ", streak)), /* @__PURE__ */ React.createElement("div", { style: { color: CATEGORY_COLOR[workout.category], fontSize: 13, marginTop: 2, fontFamily: "'IBM Plex Mono', monospace" } }, CATEGORY_LABEL[workout.category].toUpperCase())), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 18, overflowX: "auto", WebkitOverflowScrolling: "touch" } }, (function() {
+    const wd = currentWeekDates();
+    return SCHEDULE.map((d) => /* @__PURE__ */ React.createElement(
     "button",
     {
       key: d.id,
       onClick: () => {
-        setDayId(d.id);
-        setOverrideDate(null);
+        const dateStr = wd[d.id].key;
+        if (dateStr === todayKey()) { setOverrideDate(null); } else { goToDate(dateStr); }
       },
       style: {
-        flex: 1,
-        padding: "9px 0",
+        minWidth: 58,
+        flexShrink: 0,
+        padding: "8px 4px",
         borderRadius: 6,
         border: `1px solid ${d.id === effectiveDayId ? CATEGORY_COLOR[WORKOUTS[d.workout].category] : COLORS.line}`,
         background: d.id === effectiveDayId ? CATEGORY_COLOR[WORKOUTS[d.workout].category] : "transparent",
@@ -665,11 +704,17 @@ function RishiStrengthTracker() {
         fontFamily: "'Oswald', sans-serif",
         fontWeight: 600,
         fontSize: 13,
-        letterSpacing: "0.02em"
+        letterSpacing: "0.02em",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 2
       }
     },
-    d.label
-  ))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setView("today"), style: {
+    /* @__PURE__ */ React.createElement("span", null, d.label),
+    /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontWeight: 400, fontSize: 9.5, opacity: 0.85 } }, wd[d.id].label)
+  ));
+  })()), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setView("today"), style: {
     flex: 1,
     display: "flex",
     alignItems: "center",
@@ -709,7 +754,7 @@ function RishiStrengthTracker() {
     borderRadius: 6,
     padding: "6px 0",
     transform: "rotate(-1deg)"
-  } }, "Wohoooo, DAY COMPLETE")), workout.sections.map((sec) => {
+  } }, "CHECK DAY COMPLETE")), workout.sections.map((sec) => {
     const secColor = ROLE_COLORS[sectionRole(sec)];
     const sectionKey = `${day.workout}:${sec.key}`;
     const secExpanded = expandedId === sectionKey;
