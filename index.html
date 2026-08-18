@@ -355,7 +355,7 @@ function weekDatesFor(refDate) {
   SCHEDULE.forEach((d, i) => {
     const dt = new Date(monday);
     dt.setDate(monday.getDate() + i);
-    dates[d.id] = { label: dt.toLocaleDateString(undefined, { month: "short", day: "numeric" }), key: formatDateKey(dt) };
+    dates[d.id] = { label: String(dt.getDate()), key: formatDateKey(dt) };
   });
   return { monday, dates };
 }
@@ -780,7 +780,7 @@ function RishiStrengthTracker() {
         /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: COLORS.textMuted, letterSpacing: "0.04em" } }, "WEEK OF ", weekLabel),
         /* @__PURE__ */ React.createElement("button", { onClick: () => shiftWeek(1), "aria-label": "Next week", style: { background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, padding: 4, color: COLORS.textMuted, display: "flex" } }, /* @__PURE__ */ React.createElement(ChevronRight, { size: 14 }))
       ),
-      /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 18, overflowX: "auto", WebkitOverflowScrolling: "touch" } }, SCHEDULE.map((d) => /* @__PURE__ */ React.createElement(
+      /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, marginBottom: 18, overflowX: "auto", WebkitOverflowScrolling: "touch" } }, SCHEDULE.map((d) => /* @__PURE__ */ React.createElement(
     "button",
     {
       key: d.id,
@@ -789,17 +789,17 @@ function RishiStrengthTracker() {
         if (dateStr === todayKey()) { setOverrideDate(null); } else { goToDate(dateStr); }
       },
       style: {
-        minWidth: 58,
-        flexShrink: 0,
-        padding: "8px 4px",
+        flex: "1 1 0",
+        minWidth: 0,
+        padding: "7px 2px",
         borderRadius: 6,
         border: `1px solid ${wd[d.id].key === dateKey ? CATEGORY_COLOR[WORKOUTS[d.workout].category] : COLORS.line}`,
         background: wd[d.id].key === dateKey ? CATEGORY_COLOR[WORKOUTS[d.workout].category] : "transparent",
         color: wd[d.id].key === dateKey ? "#141310" : COLORS.textMuted,
         fontFamily: "'Oswald', sans-serif",
         fontWeight: 600,
-        fontSize: 13,
-        letterSpacing: "0.02em",
+        fontSize: 12.5,
+        letterSpacing: "0.01em",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -807,7 +807,7 @@ function RishiStrengthTracker() {
       }
     },
     /* @__PURE__ */ React.createElement("span", null, d.label),
-    /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontWeight: 400, fontSize: 9.5, opacity: 0.85 } }, wd[d.id].label)
+    /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontWeight: 500, fontSize: 12.5, opacity: 0.9 } }, wd[d.id].label)
   )))
     );
   })(), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setView("today"), style: {
@@ -1135,9 +1135,10 @@ function HistoryView({ log, streak, bestStreak, workout, workoutKey, onSelectDat
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: 9,
+          fontSize: 12,
+          fontWeight: 600,
           fontFamily: "'IBM Plex Mono', monospace",
-          color: trained ? "#141310" : COLORS.line,
+          color: trained ? "#141310" : COLORS.text,
           cursor: "pointer"
         }
       },
