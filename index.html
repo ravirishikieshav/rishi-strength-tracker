@@ -821,7 +821,7 @@ function RishiStrengthTracker() {
       padding: "10px 14px",
       marginBottom: 16
     }
-  }, /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 11.5, letterSpacing: "0.06em", color: COLORS.textMuted } }, "BODY WEIGHT"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "baseline", gap: 6 } }, /* @__PURE__ */ React.createElement("input", {
+  }, /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 14, fontWeight: 600, letterSpacing: "0.06em", color: COLORS.textMuted } }, "BODY WEIGHT"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "baseline", gap: 6 } }, /* @__PURE__ */ React.createElement("input", {
     type: "number",
     id: "bodyWeightInput",
     name: "bodyWeight",
@@ -1150,6 +1150,9 @@ function RishiStrengthTracker() {
 function TrendingUp(p) {
   return /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("polyline", { points: "22 7 13.5 15.5 8.5 10.5 2 17" }), /* @__PURE__ */ React.createElement("polyline", { points: "16 7 22 7 22 13" }));
 }
+function Download(p) {
+  return /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }), /* @__PURE__ */ React.createElement("polyline", { points: "7 10 12 15 17 10" }), /* @__PURE__ */ React.createElement("line", { x1: "12", y1: "15", x2: "12", y2: "3" }));
+}
 function formatModeValue(mode, v) {
   if (mode === "time") {
     const s = Math.round(v);
@@ -1172,6 +1175,192 @@ function plotCoords(series, w, h, padL, padR, padT, padB) {
     return { x, y, ...p };
   });
   return { coords, minV, maxV };
+}
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+function downloadCanvas(canvas, filename) {
+  const url = canvas.toDataURL("image/png");
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+async function waitForFonts() {
+  try {
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  } catch (e) {
+  }
+}
+async function exportWeightCard({ COLORS, rangeLabel, current, delta, filteredWeight, rolling }) {
+  await waitForFonts();
+  const W = 640, H = 420, scale = 2;
+  const canvas = document.createElement("canvas");
+  canvas.width = W * scale;
+  canvas.height = H * scale;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(scale, scale);
+  ctx.fillStyle = COLORS.surface;
+  ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = COLORS.line;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = COLORS.text;
+  ctx.font = "700 22px 'Roboto Slab'";
+  ctx.fillText("BODY WEIGHT", 28, 44);
+  ctx.font = "500 12px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.textMuted;
+  ctx.fillText(rangeLabel.toUpperCase(), 28, 64);
+  ctx.font = "600 26px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.text;
+  ctx.fillText(`${current} lbs`, 28, 108);
+  ctx.font = "500 10px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.textMuted;
+  ctx.fillText("CURRENT", 28, 122);
+  if (delta !== null) {
+    ctx.font = "600 26px 'IBM Plex Mono'";
+    ctx.fillStyle = delta <= 0 ? COLORS.go : COLORS.effort;
+    ctx.fillText(`${delta > 0 ? "+" : ""}${delta} lbs`, 220, 108);
+    ctx.font = "500 10px 'IBM Plex Mono'";
+    ctx.fillStyle = COLORS.textMuted;
+    ctx.fillText("CHANGE", 220, 122);
+  }
+  const padL = 60, padR = 30, padT = 150, padB = 60;
+  const rawSeries = filteredWeight.map((e) => ({ value: e.weight, date: e.date }));
+  const avgSeries = rolling.map((v, i) => ({ value: v, date: filteredWeight[i].date }));
+  const { coords: rawCoords, minV, maxV } = plotCoords(rawSeries, W, H, padL, padR, padT, padB);
+  const { coords: avgCoords } = plotCoords(avgSeries, W, H, padL, padR, padT, padB);
+  ctx.strokeStyle = COLORS.line;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, H - padB);
+  ctx.lineTo(W - padR, H - padB);
+  ctx.stroke();
+  ctx.font = "500 11px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.textMuted;
+  ctx.textAlign = "right";
+  ctx.fillText(String(maxV), padL - 8, padT + 4);
+  ctx.fillText(String(minV), padL - 8, H - padB);
+  ctx.textAlign = "left";
+  if (rawCoords.length > 1) {
+    ctx.strokeStyle = hexToRgba(COLORS.textMuted, 0.5);
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    rawCoords.forEach((c, i) => {
+      i === 0 ? ctx.moveTo(c.x, c.y) : ctx.lineTo(c.x, c.y);
+    });
+    ctx.stroke();
+  }
+  ctx.fillStyle = hexToRgba(COLORS.textMuted, 0.6);
+  rawCoords.forEach((c) => {
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, rawCoords.length > 1 ? 2.4 : 5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  if (avgCoords.length > 1) {
+    ctx.strokeStyle = COLORS.focus;
+    ctx.lineWidth = 3;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    avgCoords.forEach((c, i) => {
+      i === 0 ? ctx.moveTo(c.x, c.y) : ctx.lineTo(c.x, c.y);
+    });
+    ctx.stroke();
+  }
+  const n = filteredWeight.length;
+  const idxs = n > 1 ? [0, Math.floor((n - 1) / 2), n - 1] : [0];
+  ctx.font = "500 10px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.textMuted;
+  ctx.textAlign = "center";
+  idxs.forEach((i) => ctx.fillText(filteredWeight[i].date.slice(5), rawCoords[i].x, H - padB + 22));
+  ctx.textAlign = "left";
+  downloadCanvas(canvas, `body-weight-progress-${todayKey()}.png`);
+}
+async function exportExerciseCard({ COLORS, exerciseName, mode, points, best }) {
+  await waitForFonts();
+  const W = 640, H = 440, scale = 2;
+  const canvas = document.createElement("canvas");
+  canvas.width = W * scale;
+  canvas.height = H * scale;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(scale, scale);
+  ctx.fillStyle = COLORS.surface;
+  ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = COLORS.line;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = COLORS.text;
+  ctx.font = "700 20px 'Roboto Slab'";
+  ctx.fillText("EXERCISE PROGRESS", 28, 40);
+  ctx.font = "600 16px 'Roboto Slab'";
+  ctx.fillStyle = COLORS.go;
+  ctx.fillText(exerciseName, 28, 66);
+  ctx.font = "600 15px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.go;
+  ctx.fillText(`Best: ${formatModeValue(mode, best)}`, 28, 92);
+  const padL = 60, padR = 30, padT = 130, padB = 60;
+  const series = points.map((p) => ({ value: p.value, date: p.date, reps: p.reps }));
+  const { coords, minV, maxV } = plotCoords(series, W, H, padL, padR, padT, padB);
+  ctx.strokeStyle = COLORS.line;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, H - padB);
+  ctx.lineTo(W - padR, H - padB);
+  ctx.stroke();
+  ctx.font = "500 11px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.textMuted;
+  ctx.textAlign = "right";
+  ctx.fillText(formatModeValue(mode, maxV), padL - 8, padT + 4);
+  ctx.fillText(formatModeValue(mode, minV), padL - 8, H - padB);
+  ctx.textAlign = "left";
+  if (coords.length > 1) {
+    ctx.beginPath();
+    ctx.moveTo(coords[0].x, H - padB);
+    coords.forEach((c) => ctx.lineTo(c.x, c.y));
+    ctx.lineTo(coords[coords.length - 1].x, H - padB);
+    ctx.closePath();
+    ctx.fillStyle = hexToRgba(COLORS.go, 0.12);
+    ctx.fill();
+    ctx.strokeStyle = COLORS.go;
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    coords.forEach((c, i) => {
+      i === 0 ? ctx.moveTo(c.x, c.y) : ctx.lineTo(c.x, c.y);
+    });
+    ctx.stroke();
+  }
+  ctx.fillStyle = COLORS.go;
+  coords.forEach((c) => {
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, coords.length > 1 ? 4 : 6, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  const lastFourStart = Math.max(0, coords.length - 4);
+  ctx.font = "600 11px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.text;
+  ctx.textAlign = "center";
+  coords.forEach((c, i) => {
+    if (i < lastFourStart) return;
+    const p = points[i];
+    const label = mode === "weight" && p.reps !== void 0 ? `${p.reps}/${p.value} lbs` : formatModeValue(mode, p.value);
+    ctx.fillText(label, c.x, c.y - 12);
+  });
+  const n = coords.length;
+  const idxs = n > 1 ? [0, Math.floor((n - 1) / 2), n - 1] : [0];
+  ctx.font = "500 10px 'IBM Plex Mono'";
+  ctx.fillStyle = COLORS.textMuted;
+  idxs.forEach((i) => ctx.fillText(points[i].date.slice(5), coords[i].x, H - padB + 22));
+  ctx.textAlign = "left";
+  downloadCanvas(canvas, `${slugify(exerciseName)}-progress-${todayKey()}.png`);
 }
 function WeightProgress({ COLORS }) {
   const [weightRange, setWeightRange] = useState("30");
@@ -1218,7 +1407,16 @@ function WeightProgress({ COLORS }) {
   const rawPath = rawCoords.map((c) => `${c.x},${c.y}`).join(" ");
   const avgPath = avgCoords.map((c) => `${c.x},${c.y}`).join(" ");
   const xTickIdxs = filteredWeight.length > 1 ? [0, Math.floor((filteredWeight.length - 1) / 2), filteredWeight.length - 1] : filteredWeight.length === 1 ? [0] : [];
-  return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Roboto Slab', serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.03em", marginBottom: 10, color: COLORS.text } }, "BODY WEIGHT"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 12 } }, [["7", "7d"], ["30", "30d"], ["90", "90d"], ["all", "All"]].map(([val, label]) => /* @__PURE__ */ React.createElement("button", { key: val, onClick: () => setWeightRange(val), style: {
+  const rangeLabelMap = { "7": "Last 7 days", "30": "Last 30 days", "90": "Last 90 days", all: "All time" };
+  return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Roboto Slab', serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.03em", color: COLORS.text } }, "BODY WEIGHT"), filteredWeight.length > 0 && /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      onClick: () => exportWeightCard({ COLORS, rangeLabel: rangeLabelMap[weightRange], current, delta, filteredWeight, rolling }),
+      "aria-label": "Export as PNG",
+      style: { background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 6, color: COLORS.textMuted, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center" }
+    },
+    /* @__PURE__ */ React.createElement(Download, { size: 14 })
+  )), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 12 } }, [["7", "7d"], ["30", "30d"], ["90", "90d"], ["all", "All"]].map(([val, label]) => /* @__PURE__ */ React.createElement("button", { key: val, onClick: () => setWeightRange(val), style: {
     flex: 1,
     padding: "6px 0",
     borderRadius: 6,
@@ -1314,7 +1512,15 @@ function ExerciseProgress({ COLORS }) {
   const areaPath = coords.length > 1 ? `${padL},${H - padB} ${path} ${coords[coords.length - 1].x},${H - padB}` : "";
   const xTickIdxs = coords.length > 1 ? [0, Math.floor((coords.length - 1) / 2), coords.length - 1] : coords.length === 1 ? [0] : [];
   const lastFourStart = Math.max(0, coords.length - 4);
-  return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Roboto Slab', serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.03em", marginBottom: 10, color: COLORS.text } }, "EXERCISE PROGRESS"), /* @__PURE__ */ React.createElement("div", { style: { position: "relative", marginBottom: 12 } }, /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Roboto Slab', serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.03em", color: COLORS.text } }, "EXERCISE PROGRESS"), points && points.length > 0 && /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      onClick: () => exportExerciseCard({ COLORS, exerciseName: selectedExercise ? selectedExercise.name : "Exercise", mode, points, best: latest.value }),
+      "aria-label": "Export as PNG",
+      style: { background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 6, color: COLORS.textMuted, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center" }
+    },
+    /* @__PURE__ */ React.createElement(Download, { size: 14 })
+  )), /* @__PURE__ */ React.createElement("div", { style: { position: "relative", marginBottom: 12 } }, /* @__PURE__ */ React.createElement(
     "input",
     {
       type: "text",
