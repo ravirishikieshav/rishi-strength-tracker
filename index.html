@@ -33,6 +33,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 
 <script>
   // ============================================================
@@ -87,7 +89,7 @@
 </script>
 
 <script>
-const { useState, useEffect, useCallback, useRef } = React;
+const { useState, useEffect, useCallback, useRef, useMemo } = React;
 function Icon({ children, size = 16, color = "currentColor", style }) {
   return /* @__PURE__ */ React.createElement(
     "svg",
@@ -657,6 +659,19 @@ function RishiStrengthTracker() {
       console.error(e);
     }
   }, [dateKey]);
+  const syncWeightLog = useCallback(async () => {
+    try {
+      const n = bodyWeight === "" ? null : parseFloat(bodyWeight);
+      const res = await dbGet("weightLog");
+      let arr = res ? JSON.parse(res.value) : [];
+      arr = arr.filter((e) => e.date !== dateKey);
+      if (n !== null && !Number.isNaN(n)) arr.push({ date: dateKey, weight: n });
+      arr.sort((a, b) => a.date < b.date ? -1 : 1);
+      await dbSet("weightLog", JSON.stringify(arr));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [bodyWeight, dateKey]);
   function toggleItem(sectionKey, idx) {
     const compound = `${sectionKey}:${idx}`;
     persistChecklist({ ...checklist, [compound]: !checklist[compound] });
@@ -817,6 +832,7 @@ function RishiStrengthTracker() {
     value: bodyWeight === "" ? "" : bodyWeight,
     onFocus: (e) => e.target.select(),
     onChange: (e) => persistBodyWeight(e.target.value),
+    onBlur: () => syncWeightLog(),
     "aria-label": "Body weight in pounds",
     style: {
       width: 68,
@@ -901,7 +917,21 @@ function RishiStrengthTracker() {
     fontFamily: "'IBM Plex Mono', monospace",
     fontSize: 12,
     letterSpacing: "0.06em"
-  } }, /* @__PURE__ */ React.createElement(CalendarDays, { size: 13 }), " HISTORY")), view === "history" ? /* @__PURE__ */ React.createElement(HistoryView, { log, streak, bestStreak, workout, workoutKey: day.workout, onSelectDate: goToDate, COLORS, ROLE_COLORS, CATEGORY_COLOR }) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 11, fontFamily: "'IBM Plex Mono', monospace", color: COLORS.textMuted, marginBottom: 5 } }, /* @__PURE__ */ React.createElement("span", null, "TASKS DONE"), /* @__PURE__ */ React.createElement("span", null, doneTasks, " / ", totalTasks)), /* @__PURE__ */ React.createElement("div", { style: { height: 8, background: COLORS.surface, borderRadius: 4, overflow: "hidden", border: `1px solid ${COLORS.line}` } }, /* @__PURE__ */ React.createElement("div", { style: { height: "100%", width: `${totalTasks ? doneTasks / totalTasks * 100 : 0}%`, background: allDone ? COLORS.go : COLORS.focus, transition: "width 0.3s ease" } })), allDone && /* @__PURE__ */ React.createElement("div", { style: {
+  } }, /* @__PURE__ */ React.createElement(CalendarDays, { size: 13 }), " HISTORY"), /* @__PURE__ */ React.createElement("button", { onClick: () => setView("progress"), style: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    padding: "8px 0",
+    border: "none",
+    borderBottom: `2px solid ${view === "progress" ? COLORS.text : "transparent"}`,
+    background: "transparent",
+    color: view === "progress" ? COLORS.text : COLORS.textMuted,
+    fontFamily: "'IBM Plex Mono', monospace",
+    fontSize: 12,
+    letterSpacing: "0.06em"
+  } }, /* @__PURE__ */ React.createElement(TrendingUp, { size: 13 }), " PROGRESS")), view === "history" ? /* @__PURE__ */ React.createElement(HistoryView, { log, streak, bestStreak, workout, workoutKey: day.workout, onSelectDate: goToDate, COLORS, ROLE_COLORS, CATEGORY_COLOR }) : view === "progress" ? /* @__PURE__ */ React.createElement(ProgressView, { COLORS }) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 11, fontFamily: "'IBM Plex Mono', monospace", color: COLORS.textMuted, marginBottom: 5 } }, /* @__PURE__ */ React.createElement("span", null, "TASKS DONE"), /* @__PURE__ */ React.createElement("span", null, doneTasks, " / ", totalTasks)), /* @__PURE__ */ React.createElement("div", { style: { height: 8, background: COLORS.surface, borderRadius: 4, overflow: "hidden", border: `1px solid ${COLORS.line}` } }, /* @__PURE__ */ React.createElement("div", { style: { height: "100%", width: `${totalTasks ? doneTasks / totalTasks * 100 : 0}%`, background: allDone ? COLORS.go : COLORS.focus, transition: "width 0.3s ease" } })), allDone && /* @__PURE__ */ React.createElement("div", { style: {
     marginTop: 10,
     textAlign: "center",
     fontFamily: "'Roboto Slab', serif",
@@ -1116,6 +1146,228 @@ function RishiStrengthTracker() {
     /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10.5, color: COLORS.line, fontFamily: "'IBM Plex Mono', monospace", marginTop: 26 } }, "not saved, for timing only")
   ));
 }
+function TrendingUp(p) {
+  return /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("polyline", { points: "22 7 13.5 15.5 8.5 10.5 2 17" }), /* @__PURE__ */ React.createElement("polyline", { points: "16 7 22 7 22 13" }));
+}
+if (typeof ChartDataLabels !== "undefined" && typeof Chart !== "undefined") {
+  Chart.register(ChartDataLabels);
+}
+function formatModeValue(mode, v) {
+  if (mode === "time") {
+    const s = Math.round(v);
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  }
+  if (mode === "minutes") return `${Math.round(v)} min`;
+  return `${Math.round(v)} lbs`;
+}
+function WeightProgress({ COLORS }) {
+  const [weightRange, setWeightRange] = useState("30");
+  const [weightLog, setWeightLog] = useState(null);
+  const weightCanvasRef = useRef(null);
+  const weightChartRef = useRef(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await dbGet("weightLog");
+        if (cancelled) return;
+        setWeightLog(res ? JSON.parse(res.value) : []);
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) setWeightLog([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const filteredWeight = useMemo(() => {
+    if (!weightLog) return [];
+    if (weightRange === "all") return weightLog;
+    const days = parseInt(weightRange, 10);
+    const cutoff = /* @__PURE__ */ new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    const cutoffKey = formatDateKey(cutoff);
+    return weightLog.filter((e) => e.date >= cutoffKey);
+  }, [weightLog, weightRange]);
+  useEffect(() => {
+    if (!weightCanvasRef.current) return;
+    if (weightChartRef.current) {
+      weightChartRef.current.destroy();
+      weightChartRef.current = null;
+    }
+    if (!filteredWeight.length) return;
+    const labels = filteredWeight.map((e) => e.date.slice(5));
+    const raw = filteredWeight.map((e) => e.weight);
+    const rolling = filteredWeight.map((e, i) => {
+      const start = Math.max(0, i - 6);
+      const slice = filteredWeight.slice(start, i + 1);
+      const avg = slice.reduce((s, x) => s + x.weight, 0) / slice.length;
+      return Math.round(avg * 10) / 10;
+    });
+    weightChartRef.current = new Chart(weightCanvasRef.current, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          { label: "Daily", data: raw, borderColor: hexToRgba(COLORS.textMuted, 0.5), backgroundColor: "transparent", pointRadius: 2, borderWidth: 1, tension: 0.2 },
+          { label: "7 day avg", data: rolling, borderColor: COLORS.focus, backgroundColor: "transparent", pointRadius: 0, borderWidth: 2.5, tension: 0.3 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { titleColor: COLORS.text, bodyColor: COLORS.text, backgroundColor: COLORS.surfaceAlt, borderColor: COLORS.line, borderWidth: 1 },
+          datalabels: { display: false }
+        },
+        scales: {
+          x: { ticks: { color: COLORS.textMuted, font: { size: 10 }, maxTicksLimit: 6 }, grid: { color: COLORS.line } },
+          y: { ticks: { color: COLORS.textMuted, font: { size: 10 } }, grid: { color: COLORS.line } }
+        }
+      }
+    });
+  }, [filteredWeight, COLORS]);
+  const current = filteredWeight.length ? filteredWeight[filteredWeight.length - 1].weight : null;
+  const first = filteredWeight.length ? filteredWeight[0].weight : null;
+  const delta = current !== null && first !== null ? Math.round((current - first) * 10) / 10 : null;
+  return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Roboto Slab', serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.03em", marginBottom: 10, color: COLORS.text } }, "BODY WEIGHT"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 12 } }, [["7", "7d"], ["30", "30d"], ["90", "90d"], ["all", "All"]].map(([val, label]) => /* @__PURE__ */ React.createElement("button", { key: val, onClick: () => setWeightRange(val), style: {
+    flex: 1,
+    padding: "6px 0",
+    borderRadius: 6,
+    fontSize: 11.5,
+    fontFamily: "'IBM Plex Mono', monospace",
+    border: `1px solid ${weightRange === val ? COLORS.focus : COLORS.line}`,
+    background: weightRange === val ? hexToRgba(COLORS.focus, 0.15) : "transparent",
+    color: weightRange === val ? COLORS.focus : COLORS.textMuted
+  } }, label))), weightLog === null && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: COLORS.textMuted } }, "Loading..."), weightLog !== null && filteredWeight.length === 0 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: COLORS.textMuted } }, "No weight logged in this range yet."), filteredWeight.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 16, marginBottom: 10, fontFamily: "'IBM Plex Mono', monospace" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 19, fontWeight: 600, color: COLORS.text } }, current, " lbs"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9.5, color: COLORS.textMuted } }, "CURRENT")), delta !== null && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 19, fontWeight: 600, color: delta <= 0 ? COLORS.go : COLORS.effort } }, delta > 0 ? "+" : "", delta, " lbs"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9.5, color: COLORS.textMuted } }, "CHANGE"))), /* @__PURE__ */ React.createElement("div", { style: { position: "relative", height: 180 } }, /* @__PURE__ */ React.createElement("canvas", { ref: weightCanvasRef }))));
+}
+function ExerciseProgress({ COLORS }) {
+  const groups = useMemo(() => {
+    const seen = /* @__PURE__ */ new Set();
+    const g = { push: [], pull: [], mobility: [], cardio: [] };
+    Object.entries(WORKOUTS).forEach(([wKey, w]) => {
+      w.sections.filter((s) => s.type === "sets").forEach((s) => {
+        s.exercises.forEach((ex) => {
+          if (seen.has(ex.id)) return;
+          seen.add(ex.id);
+          const mode2 = ex.mode || "weight";
+          const bucket = mode2 === "minutes" ? "cardio" : w.category;
+          g[bucket].push({ id: ex.id, name: ex.name, mode: mode2 });
+        });
+      });
+    });
+    return g;
+  }, []);
+  const allExercises = [...groups.push, ...groups.pull, ...groups.mobility, ...groups.cardio];
+  const [selected, setSelected] = useState(allExercises[0] ? allExercises[0].id : "");
+  const [points, setPoints] = useState(null);
+  const canvasRef = useRef(null);
+  const chartRef = useRef(null);
+  useEffect(() => {
+    if (!selected) return;
+    let cancelled = false;
+    (async () => {
+      setPoints(null);
+      try {
+        const res = await dbGet("log");
+        const logData = res ? JSON.parse(res.value) : [];
+        const wks = EXERCISE_WORKOUTS[selected] || [];
+        const cutoff = /* @__PURE__ */ new Date();
+        cutoff.setDate(cutoff.getDate() - 180);
+        const cutoffKey = formatDateKey(cutoff);
+        const entries = logData.filter((l) => wks.includes(l.workout) && l.date >= cutoffKey).sort((a, b) => a.date < b.date ? -1 : 1);
+        const results = await Promise.allSettled(entries.map((e) => dbGet(`sets:${e.date}:${e.workout}`)));
+        if (cancelled) return;
+        const mode2 = (EXERCISE_META[selected] || {}).mode || "weight";
+        const pts = [];
+        results.forEach((r, i) => {
+          if (r.status !== "fulfilled" || !r.value) return;
+          const blob = JSON.parse(r.value.value);
+          const arr = blob[selected] || [];
+          const best = bestFromArray(mode2, arr);
+          if (!best) return;
+          const val = mode2 === "weight" ? best.w : mode2 === "time" ? best.sec : best.min;
+          pts.push({ date: entries[i].date, value: val, reps: mode2 === "weight" ? best.r : void 0 });
+        });
+        setPoints(pts);
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) setPoints([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [selected]);
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    if (chartRef.current) {
+      chartRef.current.destroy();
+      chartRef.current = null;
+    }
+    if (!points || !points.length) return;
+    const mode2 = (EXERCISE_META[selected] || {}).mode || "weight";
+    const labels = points.map((p) => p.date.slice(5));
+    const data = points.map((p) => p.value);
+    const pointLabel = (idx) => {
+      const p = points[idx];
+      if (mode2 === "weight" && p.reps !== void 0) return `${p.reps}/${p.value} lbs`;
+      return formatModeValue(mode2, p.value);
+    };
+    chartRef.current = new Chart(canvasRef.current, {
+      type: "line",
+      data: { labels, datasets: [{ data, borderColor: COLORS.go, backgroundColor: hexToRgba(COLORS.go, 0.12), pointRadius: 3, pointBackgroundColor: COLORS.go, borderWidth: 2, tension: 0.25, fill: true }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: { padding: { top: 22 } },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            titleColor: COLORS.text,
+            bodyColor: COLORS.text,
+            backgroundColor: COLORS.surfaceAlt,
+            borderColor: COLORS.line,
+            borderWidth: 1,
+            callbacks: { label: (ctx) => pointLabel(ctx.dataIndex) }
+          },
+          datalabels: {
+            display: (ctx) => ctx.dataIndex >= points.length - 4,
+            formatter: (value, ctx) => pointLabel(ctx.dataIndex),
+            color: COLORS.text,
+            anchor: "end",
+            align: "top",
+            offset: 4,
+            font: { size: 9, family: "'IBM Plex Mono', monospace", weight: "600" }
+          }
+        },
+        scales: {
+          x: { ticks: { color: COLORS.textMuted, font: { size: 10 }, maxTicksLimit: 6 }, grid: { color: COLORS.line } },
+          y: { ticks: { color: COLORS.textMuted, font: { size: 10 }, callback: (v) => formatModeValue(mode2, v) }, grid: { color: COLORS.line } }
+        }
+      }
+    });
+  }, [points, COLORS, selected]);
+  const mode = (EXERCISE_META[selected] || {}).mode || "weight";
+  const latest = points && points.length ? points[points.length - 1] : null;
+  return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Roboto Slab', serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.03em", marginBottom: 10, color: COLORS.text } }, "EXERCISE PROGRESS"), /* @__PURE__ */ React.createElement("select", { value: selected, onChange: (e) => setSelected(e.target.value), style: {
+    width: "100%",
+    padding: "9px 10px",
+    marginBottom: 12,
+    background: COLORS.surfaceAlt,
+    border: `1px solid ${COLORS.line}`,
+    borderRadius: 6,
+    color: COLORS.text,
+    fontSize: 13,
+    fontFamily: "'IBM Plex Mono', monospace"
+  } }, /* @__PURE__ */ React.createElement("optgroup", { label: "Push" }, groups.push.map((ex) => /* @__PURE__ */ React.createElement("option", { key: ex.id, value: ex.id }, ex.name))), /* @__PURE__ */ React.createElement("optgroup", { label: "Pull" }, groups.pull.map((ex) => /* @__PURE__ */ React.createElement("option", { key: ex.id, value: ex.id }, ex.name))), /* @__PURE__ */ React.createElement("optgroup", { label: "Mobility" }, groups.mobility.map((ex) => /* @__PURE__ */ React.createElement("option", { key: ex.id, value: ex.id }, ex.name))), /* @__PURE__ */ React.createElement("optgroup", { label: "Cardio" }, groups.cardio.map((ex) => /* @__PURE__ */ React.createElement("option", { key: ex.id, value: ex.id }, ex.name)))), points === null && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: COLORS.textMuted } }, "Loading..."), points !== null && points.length === 0 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: COLORS.textMuted } }, "No history for this exercise yet."), points && points.length > 0 && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 11.5, color: COLORS.go, marginBottom: 10 } }, "Best: ", formatModeValue(mode, latest.value)), /* @__PURE__ */ React.createElement("div", { style: { position: "relative", height: 180 } }, /* @__PURE__ */ React.createElement("canvas", { ref: canvasRef }))));
+}
+function ProgressView({ COLORS }) {
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(WeightProgress, { COLORS }), /* @__PURE__ */ React.createElement(ExerciseProgress, { COLORS }));
+}
+
 function HistoryView({ log, streak, bestStreak, workout, workoutKey, onSelectDate, COLORS, ROLE_COLORS, CATEGORY_COLOR }) {
   const now = /* @__PURE__ */ new Date();
   const [monthOffset, setMonthOffset] = useState(0);
