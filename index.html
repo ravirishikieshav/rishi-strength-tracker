@@ -20,7 +20,6 @@
 <!-- React (no build step needed) -->
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <!-- Firebase (compat SDK, no build step needed) -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
@@ -33,13 +32,13 @@
   // Get this from: Firebase Console > Project Settings > Your apps > Web app > Config
   // ============================================================
   const firebaseConfig = {
-  apiKey: "AIzaSyBX5HnyLlYftzm9A_Y6CRkVlL2RCr_oqmg",
-  authDomain: "rishi-strength-tracker.firebaseapp.com",
-  projectId: "rishi-strength-tracker",
-  storageBucket: "rishi-strength-tracker.firebasestorage.app",
-  messagingSenderId: "286386676511",
-  appId: "1:286386676511:web:a7c7f1c37e11ba7dcb862a"
-};
+	apiKey: "AIzaSyBX5HnyLlYftzm9A_Y6CRkVlL2RCr_oqmg",
+	authDomain: "rishi-strength-tracker.firebaseapp.com",
+	projectId: "rishi-strength-tracker",
+	storageBucket: "rishi-strength-tracker.firebasestorage.app",
+	messagingSenderId: "286386676511",
+	appId: "1:286386676511:web:a7c7f1c37e11ba7dcb862a"
+  };
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
@@ -79,28 +78,34 @@
   };
 </script>
 
-<script type="text/babel" data-presets="react,env">
+<script>
 const { useState, useEffect, useCallback } = React;
-
-// ---- Hand-rolled icons (no external icon library needed) ----
 function Icon({ children, size = 16, color = "currentColor", style }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color}
-      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={style}>
-      {children}
-    </svg>
+  return /* @__PURE__ */ React.createElement(
+    "svg",
+    {
+      width: size,
+      height: size,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: color,
+      strokeWidth: "2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      style
+    },
+    children
   );
 }
-const Check = (p) => <Icon {...p}><polyline points="20 6 9 17 4 12" /></Icon>;
-const ChevronLeft = (p) => <Icon {...p}><polyline points="15 18 9 12 15 6" /></Icon>;
-const ChevronRight = (p) => <Icon {...p}><polyline points="9 18 15 12 9 6" /></Icon>;
-const ChevronDown = (p) => <Icon {...p}><polyline points="6 9 12 15 18 9" /></Icon>;
-const ChevronUp = (p) => <Icon {...p}><polyline points="18 15 12 9 6 15" /></Icon>;
-const Flame = (p) => <Icon {...p}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></Icon>;
-const CalendarDays = (p) => <Icon {...p}><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></Icon>;
-const ListChecks = (p) => <Icon {...p}><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></Icon>;
-const Trophy = (p) => <Icon {...p}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></Icon>;
-
+const Check = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("polyline", { points: "20 6 9 17 4 12" }));
+const ChevronLeft = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("polyline", { points: "15 18 9 12 15 6" }));
+const ChevronRight = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("polyline", { points: "9 18 15 12 9 6" }));
+const ChevronDown = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("polyline", { points: "6 9 12 15 18 9" }));
+const ChevronUp = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("polyline", { points: "18 15 12 9 6 15" }));
+const Flame = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("path", { d: "M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" }));
+const CalendarDays = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("rect", { x: "3", y: "4", width: "18", height: "18", rx: "2", ry: "2" }), /* @__PURE__ */ React.createElement("line", { x1: "16", y1: "2", x2: "16", y2: "6" }), /* @__PURE__ */ React.createElement("line", { x1: "8", y1: "2", x2: "8", y2: "6" }), /* @__PURE__ */ React.createElement("line", { x1: "3", y1: "10", x2: "21", y2: "10" }));
+const ListChecks = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("path", { d: "m3 17 2 2 4-4" }), /* @__PURE__ */ React.createElement("path", { d: "m3 7 2 2 4-4" }), /* @__PURE__ */ React.createElement("path", { d: "M13 6h8" }), /* @__PURE__ */ React.createElement("path", { d: "M13 12h8" }), /* @__PURE__ */ React.createElement("path", { d: "M13 18h8" }));
+const Trophy = (p) => /* @__PURE__ */ React.createElement(Icon, { ...p }, /* @__PURE__ */ React.createElement("path", { d: "M6 9H4.5a2.5 2.5 0 0 1 0-5H6" }), /* @__PURE__ */ React.createElement("path", { d: "M18 9h1.5a2.5 2.5 0 0 0 0-5H18" }), /* @__PURE__ */ React.createElement("path", { d: "M4 22h16" }), /* @__PURE__ */ React.createElement("path", { d: "M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" }), /* @__PURE__ */ React.createElement("path", { d: "M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" }), /* @__PURE__ */ React.createElement("path", { d: "M18 2H6v7a6 6 0 0 0 12 0V2Z" }));
 const COLORS = {
   bg: "#171613",
   surface: "#211F1B",
@@ -110,65 +115,69 @@ const COLORS = {
   textMuted: "#A39C8F",
   go: "#7C9473",
   effort: "#C1583D",
-  focus: "#C9A227",
+  focus: "#C9A227"
 };
-
 const CATEGORY_COLOR = { push: COLORS.focus, pull: COLORS.go, mobility: COLORS.effort };
 const CATEGORY_LABEL = { push: "Push", pull: "Pull", mobility: "Mobility" };
-
 const ROLE_COLORS = {
   warmup: "#9BEAF7",
   main: "#8FE0BE",
   cooldown: "#A9B4F7",
-  cardio: "#FFC79B",
+  cardio: "#FFC79B"
 };
-
 function sectionRole(sec) {
   if (sec.key === "warmup") return "warmup";
   if (sec.key === "cooldown") return "cooldown";
   if (sec.key === "cardio") return "cardio";
   return "main";
 }
-
 function hexToRgba(hex, alpha) {
   const n = parseInt(hex.slice(1), 16);
-  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  const r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
-
-// ---- Workout data, transcribed from the program screenshots ----
 const WORKOUTS = {
   pushDay1: {
     name: "Push Day 1",
     category: "push",
     sections: [
       { type: "checklist", key: "warmup", title: "Warm-up", items: [
-        "Arm Circles", "Hip Circles", "Kneeling Hand on Head Thoracic Mobilisation",
-        "Swinging Adductor Stretch", "Swinging Hamstring Stretch", "Threading the Needle and Backward Thoracic",
+        "Arm Circles",
+        "Hip Circles",
+        "Kneeling Hand on Head Thoracic Mobilisation",
+        "Swinging Adductor Stretch",
+        "Swinging Hamstring Stretch",
+        "Threading the Needle and Backward Thoracic"
       ] },
       { type: "sets", key: "main", title: "Chest and Triceps", sets: 3, exercises: [
-        { id: "p1_incline_press", name: "30° Incline Dumbbell Chest Press, Pronated Grip" },
+        { id: "p1_incline_press", name: "30\xB0 Incline Dumbbell Chest Press, Pronated Grip" },
         { id: "p1_machine_fly", name: "Machine Fly" },
         { id: "p1_dips", name: "Dips" },
         { id: "p1_cable_tri_wide", name: "Standing Cable Triceps Extension, Wide Grip" },
         { id: "p1_ez_tri_ext", name: "Incline EZ Bar Triceps Extension" },
-        { id: "iso_pushup", name: "Isometric Pushup", mode: "time" },
+        { id: "iso_pushup", name: "Isometric Pushup", mode: "time" }
       ] },
       { type: "checklist", key: "cooldown", title: "Cool-down", items: [
-        "Static Pectoral Stretch, 90 Degree Bent Elbow", "Upper Trap Stretch",
+        "Static Pectoral Stretch, 90 Degree Bent Elbow",
+        "Upper Trap Stretch"
       ] },
       { type: "sets", key: "cardio", title: "Cardio", sets: 1, exercises: [
-        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" },
-      ] },
-    ],
+        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" }
+      ] }
+    ]
   },
   pullDay1: {
     name: "Pull Day 1",
     category: "pull",
     sections: [
       { type: "checklist", key: "warmup", title: "Warm-up", items: [
-        "Swinging Adductor Stretch", "Swinging Hamstring Stretch", "Cat and Camel", "Hip Circles",
-        "Threading the Needle and Backward Thoracic", "Arm Circles", "Jumping Jacks",
+        "Swinging Adductor Stretch",
+        "Swinging Hamstring Stretch",
+        "Cat and Camel",
+        "Hip Circles",
+        "Threading the Needle and Backward Thoracic",
+        "Arm Circles",
+        "Jumping Jacks"
       ] },
       { type: "sets", key: "main", title: "Back and Biceps", sets: 3, exercises: [
         { id: "pull_up", name: "Pull Up" },
@@ -177,16 +186,19 @@ const WORKOUTS = {
         { id: "pu1_lying_row_pronated", name: "Lying Dumbbell Row on Bench, Pronated Grip" },
         { id: "pu1_db_curl", name: "Standing Dumbbell Bicep Curl" },
         { id: "pu1_incline_twist_curl", name: "Incline Twisting Bicep Curl, Neutral to Supinated" },
-        { id: "dead_hang", name: "Dead Hang", mode: "time" },
+        { id: "dead_hang", name: "Dead Hang", mode: "time" }
       ] },
       { type: "checklist", key: "cooldown", title: "Cool-down", items: [
-        "Cat and Camel", "Dynamic 90/90 Glute Stretch", "Dynamic Triceps Overhead Stretch",
-        "Lying Low Back Stretch", "Static Lat Stretch, Elbows on Bench",
+        "Cat and Camel",
+        "Dynamic 90/90 Glute Stretch",
+        "Dynamic Triceps Overhead Stretch",
+        "Lying Low Back Stretch",
+        "Static Lat Stretch, Elbows on Bench"
       ] },
       { type: "sets", key: "cardio", title: "Cardio", sets: 1, exercises: [
-        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" },
-      ] },
-    ],
+        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" }
+      ] }
+    ]
   },
   mobilityLevel1: {
     name: "Mobility Level 1",
@@ -198,50 +210,60 @@ const WORKOUTS = {
         { id: "mob_feldenkris", name: "Feldenkris Shoulder Spine Integrater" },
         { id: "mob_thoracic_kneel", name: "Kneeling Hand on Head Thoracic Mobilisation" },
         { id: "mob_levator_scap", name: "Levator Scapula Stretch" },
-        { id: "mob_pnf_hamstring", name: "PNF Hamstring Stretch" },
+        { id: "mob_pnf_hamstring", name: "PNF Hamstring Stretch" }
       ] },
       { type: "sets", key: "forearms", title: "Forearms and Core", sets: 3, exercises: [
         { id: "mob_wrist_curl", name: "Wrist Curls" },
         { id: "mob_wrist_ext", name: "Wrist Extension" },
         { id: "mob_cable_crunch", name: "Cable Crunch" },
-        { id: "mob_hanging_leg", name: "Hanging Leg Raises with Bent Knees" },
+        { id: "mob_hanging_leg", name: "Hanging Leg Raises with Bent Knees" }
       ] },
       { type: "sets", key: "cardio", title: "Cardio", sets: 1, exercises: [
-        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" },
-      ] },
-    ],
+        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" }
+      ] }
+    ]
   },
   pushDay2: {
     name: "Push Day 2",
     category: "push",
     sections: [
       { type: "checklist", key: "warmup", title: "Warm-up", items: [
-        "Arm Circles", "Hip Circles", "Kneeling Hand on Head Thoracic Mobilisation",
-        "Swinging Adductor Stretch", "Swinging Hamstring Stretch", "Threading the Needle and Backward Thoracic",
+        "Arm Circles",
+        "Hip Circles",
+        "Kneeling Hand on Head Thoracic Mobilisation",
+        "Swinging Adductor Stretch",
+        "Swinging Hamstring Stretch",
+        "Threading the Needle and Backward Thoracic"
       ] },
       { type: "sets", key: "main", title: "Chest and Triceps", sets: 3, exercises: [
-        { id: "p2_smith_incline", name: "Smith Machine 30° Inclined Bench Press" },
+        { id: "p2_smith_incline", name: "Smith Machine 30\xB0 Inclined Bench Press" },
         { id: "p2_cable_crossover", name: "Cable Crossover" },
         { id: "p2_db_chest_press", name: "Dumbbell Chest Press, Pronated Grip" },
         { id: "p2_cable_tri_narrow", name: "Standing Cable Triceps Extension, Narrow Grip" },
         { id: "p2_single_db_ohtri", name: "Single Dumbbell Overhead Triceps Extension" },
-        { id: "iso_pushup", name: "Isometric Pushup", mode: "time" },
+        { id: "iso_pushup", name: "Isometric Pushup", mode: "time" }
       ] },
       { type: "checklist", key: "cooldown", title: "Cool-down", items: [
-        "Static Pectoral Stretch, 90 Degree Bent Elbow", "Upper Trap Stretch",
+        "Static Pectoral Stretch, 90 Degree Bent Elbow",
+        "Upper Trap Stretch"
       ] },
       { type: "sets", key: "cardio", title: "Cardio", sets: 1, exercises: [
-        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" },
-      ] },
-    ],
+        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" }
+      ] }
+    ]
   },
   pullDay2: {
     name: "Pull Day 2",
     category: "pull",
     sections: [
       { type: "checklist", key: "warmup", title: "Warm-up", items: [
-        "Swinging Adductor Stretch", "Swinging Hamstring Stretch", "Cat and Camel", "Hip Circles",
-        "Threading the Needle and Backward Thoracic", "Arm Circles", "Jumping Jacks",
+        "Swinging Adductor Stretch",
+        "Swinging Hamstring Stretch",
+        "Cat and Camel",
+        "Hip Circles",
+        "Threading the Needle and Backward Thoracic",
+        "Arm Circles",
+        "Jumping Jacks"
       ] },
       { type: "sets", key: "main", title: "Back and Biceps", sets: 3, exercises: [
         { id: "pull_up", name: "Pull Up" },
@@ -250,33 +272,37 @@ const WORKOUTS = {
         { id: "pu2_side_shrug", name: "Dumbbell Side Shrugs" },
         { id: "pu2_barbell_curl", name: "Standing Barbell Bicep Curl, Medium Grip" },
         { id: "pu2_hammer_curl", name: "Standing Hammer Curl" },
-        { id: "dead_hang", name: "Dead Hang", mode: "time" },
+        { id: "dead_hang", name: "Dead Hang", mode: "time" }
       ] },
       { type: "checklist", key: "cooldown", title: "Cool-down", items: [
-        "Cat and Camel", "Dynamic 90/90 Glute Stretch", "Dynamic Triceps Overhead Stretch",
-        "Lying Low Back Stretch", "Static Lat Stretch, Elbows on Bench",
+        "Cat and Camel",
+        "Dynamic 90/90 Glute Stretch",
+        "Dynamic Triceps Overhead Stretch",
+        "Lying Low Back Stretch",
+        "Static Lat Stretch, Elbows on Bench"
       ] },
       { type: "sets", key: "cardio", title: "Cardio", sets: 1, exercises: [
-        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" },
-      ] },
-    ],
-  },
+        { id: "treadmill", name: "Incline Treadmill Walk", mode: "minutes" }
+      ] }
+    ]
+  }
 };
-
 const EXERCISE_META = {};
 Object.values(WORKOUTS).forEach((w) => {
   w.sections.filter((s) => s.type === "sets").forEach((s) => {
-    s.exercises.forEach((ex) => { EXERCISE_META[ex.id] = { name: ex.name, mode: ex.mode || "weight" }; });
+    s.exercises.forEach((ex) => {
+      EXERCISE_META[ex.id] = { name: ex.name, mode: ex.mode || "weight" };
+    });
   });
 });
-
 const EXERCISE_ROLE = {};
 Object.values(WORKOUTS).forEach((w) => {
   w.sections.filter((s) => s.type === "sets").forEach((s) => {
-    s.exercises.forEach((ex) => { EXERCISE_ROLE[ex.id] = sectionRole(s); });
+    s.exercises.forEach((ex) => {
+      EXERCISE_ROLE[ex.id] = sectionRole(s);
+    });
   });
 });
-
 const EXERCISE_WORKOUTS = {};
 Object.entries(WORKOUTS).forEach(([wKey, w]) => {
   w.sections.filter((s) => s.type === "sets").forEach((s) => {
@@ -286,24 +312,25 @@ Object.entries(WORKOUTS).forEach(([wKey, w]) => {
     });
   });
 });
-
 const SCHEDULE = [
   { id: "mon", label: "Mon", workout: "pushDay1" },
   { id: "tue", label: "Tue", workout: "pullDay1" },
   { id: "wed", label: "Wed", workout: "mobilityLevel1" },
   { id: "thu", label: "Thu", workout: "pushDay2" },
   { id: "fri", label: "Fri", workout: "pullDay2" },
-  { id: "sat", label: "Sat", workout: "mobilityLevel1" },
+  { id: "sat", label: "Sat", workout: "mobilityLevel1" }
 ];
-
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const WEEKDAY_LETTERS = ["S", "M", "T", "W", "T", "F", "S"];
-
 function formatDateKey(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
-function todayKey() { return formatDateKey(new Date()); }
-function todayDayId() { return dayIdForDate(new Date()); }
+function todayKey() {
+  return formatDateKey(/* @__PURE__ */ new Date());
+}
+function todayDayId() {
+  return dayIdForDate(/* @__PURE__ */ new Date());
+}
 function dayIdForDate(d) {
   const dow = d.getDay();
   const map = { 1: "mon", 2: "tue", 3: "wed", 4: "thu", 5: "fri", 6: "sat" };
@@ -347,7 +374,7 @@ function bestFromArray(mode, arr) {
     if (!v) return;
     if (mode === "weight") {
       if (!((v.r || 0) > 0)) return;
-      if (!best || v.w > best.w || (v.w === best.w && v.r > best.r)) best = { r: v.r || 0, w: v.w || 0 };
+      if (!best || v.w > best.w || v.w === best.w && v.r > best.r) best = { r: v.r || 0, w: v.w || 0 };
     } else if (mode === "time") {
       const sec = (v.m || 0) * 60 + (v.s || 0);
       if (sec <= 0) return;
@@ -363,23 +390,22 @@ function bestFromArray(mode, arr) {
 function mergeBest(mode, a, b) {
   if (!a) return b;
   if (!b) return a;
-  if (mode === "weight") return (b.w > a.w || (b.w === a.w && b.r > a.r)) ? b : a;
+  if (mode === "weight") return b.w > a.w || b.w === a.w && b.r > a.r ? b : a;
   if (mode === "time") return b.sec > a.sec ? b : a;
   return b.min > a.min ? b : a;
 }
 function trendPoint(mode, arr) {
   if (mode === "time") {
-    const totalSec = arr.reduce((s, v) => s + ((v?.m || 0) * 60 + (v?.s || 0)), 0);
+    const totalSec = arr.reduce((s, v) => s + (((v == null ? void 0 : v.m) || 0) * 60 + ((v == null ? void 0 : v.s) || 0)), 0);
     return { total: totalSec, label: `${Math.floor(totalSec / 60)}:${String(totalSec % 60).padStart(2, "0")}` };
   }
   if (mode === "minutes") {
-    const totalMin = arr.reduce((s, v) => s + (v?.min || 0), 0);
+    const totalMin = arr.reduce((s, v) => s + ((v == null ? void 0 : v.min) || 0), 0);
     return { total: totalMin, label: `${totalMin} min` };
   }
-  const totalReps = arr.reduce((s, v) => s + (v?.r || 0), 0);
+  const totalReps = arr.reduce((s, v) => s + ((v == null ? void 0 : v.r) || 0), 0);
   return { total: totalReps, label: `${totalReps} reps` };
 }
-
 function RishiStrengthTracker() {
   const [loading, setLoading] = useState(true);
   const [dayId, setDayId] = useState(todayDayId());
@@ -393,20 +419,19 @@ function RishiStrengthTracker() {
   const [bestStreak, setBestStreak] = useState(0);
   const [log, setLog] = useState([]);
   const [view, setView] = useState("today");
-
   const isToday = !overrideDate;
   const dateKey = overrideDate || todayKey();
-  const effectiveDayId = overrideDate ? dayIdForDate(new Date(overrideDate + "T00:00:00")) : dayId;
+  const effectiveDayId = overrideDate ? dayIdForDate(/* @__PURE__ */ new Date(overrideDate + "T00:00:00")) : dayId;
   const day = SCHEDULE.find((d) => d.id === effectiveDayId);
   const workout = WORKOUTS[day.workout];
-
   function goToDate(dateStr) {
     setOverrideDate(dateStr);
     setView("today");
     setExpandedId(null);
   }
-  function backToToday() { setOverrideDate(null); }
-
+  function backToToday() {
+    setOverrideDate(null);
+  }
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -415,32 +440,28 @@ function RishiStrengthTracker() {
         const [checkRes, setsRes, logRes] = await Promise.allSettled([
           dbGet(`checklist:${dateKey}:${day.workout}`),
           dbGet(`sets:${dateKey}:${day.workout}`),
-          dbGet("log"),
+          dbGet("log")
         ]);
         if (cancelled) return;
         setChecklist(checkRes.status === "fulfilled" && checkRes.value ? JSON.parse(checkRes.value.value) : {});
         setSetsData(setsRes.status === "fulfilled" && setsRes.value ? JSON.parse(setsRes.value.value) : {});
-
         const logData = logRes.status === "fulfilled" && logRes.value ? JSON.parse(logRes.value.value) : [];
         setLog(logData);
         setStreak(computeStreak(logData));
         setBestStreak(computeBestStreak(logData));
-
-        const cutoff = new Date(dateKey + "T00:00:00");
+        const cutoff = /* @__PURE__ */ new Date(dateKey + "T00:00:00");
         cutoff.setDate(cutoff.getDate() - 7);
         const cutoffKey = formatDateKey(cutoff);
-
         const exList = workout.sections.filter((s) => s.type === "sets").flatMap((s) => s.exercises);
         const neededByExercise = {};
         exList.forEach((ex) => {
           const wks = EXERCISE_WORKOUTS[ex.id] || [day.workout];
           const past = logData.filter((l) => wks.includes(l.workout) && l.date !== dateKey);
-          const sortedDesc = [...past].sort((a, b) => (a.date < b.date ? 1 : -1));
+          const sortedDesc = [...past].sort((a, b) => a.date < b.date ? 1 : -1);
           const lastEntry = sortedDesc[0] || null;
           const windowEntries = past.filter((l) => l.date >= cutoffKey);
           neededByExercise[ex.id] = { lastEntry, windowEntries };
         });
-
         const allEntries = Object.values(neededByExercise).flatMap((v) => [v.lastEntry, ...v.windowEntries].filter(Boolean));
         const uniqueKeys = [...new Set(allEntries.map((e) => `${e.date}:${e.workout}`))];
         const fetchResults = await Promise.allSettled(uniqueKeys.map((k) => dbGet(`sets:${k}`)));
@@ -449,7 +470,6 @@ function RishiStrengthTracker() {
           const r = fetchResults[idx];
           blobByKey[k] = r.status === "fulfilled" && r.value ? JSON.parse(r.value.value) : {};
         });
-
         const newLastSets = {}, newBestWeek = {};
         exList.forEach((ex) => {
           const mode = ex.mode || "weight";
@@ -471,16 +491,20 @@ function RishiStrengthTracker() {
       }
     }
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [dayId, dateKey, day.workout, overrideDate]);
-
   function computeStreak(logArr) {
     const dates = new Set(logArr.map((l) => l.date));
     let count = 0;
-    let cursor = new Date();
+    let cursor = /* @__PURE__ */ new Date();
     while (true) {
       const k = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(cursor.getDate()).padStart(2, "0")}`;
-      if (dates.has(k)) { count++; cursor.setDate(cursor.getDate() - 1); } else break;
+      if (dates.has(k)) {
+        count++;
+        cursor.setDate(cursor.getDate() - 1);
+      } else break;
     }
     return count;
   }
@@ -488,35 +512,39 @@ function RishiStrengthTracker() {
     const dates = [...new Set(logArr.map((l) => l.date))].sort();
     let best = 0, cur = 0, prev = null;
     dates.forEach((k) => {
-      const d = new Date(k + "T00:00:00");
-      cur = prev && Math.round((d - prev) / 86400000) === 1 ? cur + 1 : 1;
+      const d = /* @__PURE__ */ new Date(k + "T00:00:00");
+      cur = prev && Math.round((d - prev) / 864e5) === 1 ? cur + 1 : 1;
       best = Math.max(best, cur);
       prev = d;
     });
     return best;
   }
-
   const persistChecklist = useCallback(async (next) => {
     setChecklist(next);
-    try { await dbSet(`checklist:${dateKey}:${day.workout}`, JSON.stringify(next)); } catch (e) { console.error(e); }
+    try {
+      await dbSet(`checklist:${dateKey}:${day.workout}`, JSON.stringify(next));
+    } catch (e) {
+      console.error(e);
+    }
   }, [dateKey, day.workout]);
-
   const persistSets = useCallback(async (next) => {
     setSetsData(next);
-    try { await dbSet(`sets:${dateKey}:${day.workout}`, JSON.stringify(next)); } catch (e) { console.error(e); }
+    try {
+      await dbSet(`sets:${dateKey}:${day.workout}`, JSON.stringify(next));
+    } catch (e) {
+      console.error(e);
+    }
   }, [dateKey, day.workout]);
-
   function toggleItem(sectionKey, idx) {
     const compound = `${sectionKey}:${idx}`;
     persistChecklist({ ...checklist, [compound]: !checklist[compound] });
   }
-
   const [stopwatches, setStopwatches] = useState({});
   const [, forceTick] = useState(0);
   useEffect(() => {
     const anyRunning = Object.values(stopwatches).some((sw) => sw.running);
     if (!anyRunning) return;
-    const id = setInterval(() => forceTick((t) => t + 1), 1000);
+    const id = setInterval(() => forceTick((t) => t + 1), 1e3);
     return () => clearInterval(id);
   }, [stopwatches]);
   function stopwatchElapsedSec(exId) {
@@ -524,7 +552,7 @@ function RishiStrengthTracker() {
     if (!sw) return 0;
     const base = sw.accumulated || 0;
     const live = sw.running && sw.startedAt ? Date.now() - sw.startedAt : 0;
-    return Math.floor((base + live) / 1000);
+    return Math.floor((base + live) / 1e3);
   }
   function toggleStopwatch(exId) {
     setStopwatches((prev) => {
@@ -538,32 +566,36 @@ function RishiStrengthTracker() {
   function resetStopwatch(exId) {
     setStopwatches((prev) => ({ ...prev, [exId]: { running: false, startedAt: null, accumulated: 0 } }));
   }
-
-  function toggleCard(exId) { setExpandedId((prev) => (prev === exId ? null : exId)); }
-  function toggleSection(sectionKey) { setExpandedId((prev) => (prev === sectionKey ? null : sectionKey)); }
-
+  function toggleCard(exId) {
+    setExpandedId((prev) => prev === exId ? null : exId);
+  }
+  function toggleSection(sectionKey) {
+    setExpandedId((prev) => prev === sectionKey ? null : sectionKey);
+  }
   function updateSet(exId, idx, patch) {
     const arr = setsData[exId] ? [...setsData[exId]] : [];
-    arr[idx] = { ...(arr[idx] || {}), ...patch };
+    arr[idx] = { ...arr[idx] || {}, ...patch };
     persistSets({ ...setsData, [exId]: arr });
   }
-
   let totalTasks = 0, doneTasks = 0;
   workout.sections.forEach((sec) => {
     if (sec.type === "checklist") {
       totalTasks += sec.items.length;
-      sec.items.forEach((_, i) => { if (checklist[`${sec.key}:${i}`]) doneTasks++; });
+      sec.items.forEach((_, i) => {
+        if (checklist[`${sec.key}:${i}`]) doneTasks++;
+      });
     } else {
       totalTasks += sec.exercises.length * sec.sets;
       sec.exercises.forEach((ex) => {
         const mode = ex.mode || "weight";
         const arr = setsData[ex.id] || [];
-        for (let i = 0; i < sec.sets; i++) { if (isLogged(mode, arr[i])) doneTasks++; }
+        for (let i = 0; i < sec.sets; i++) {
+          if (isLogged(mode, arr[i])) doneTasks++;
+        }
       });
     }
   });
   const allDone = totalTasks > 0 && doneTasks >= totalTasks;
-
   async function markDayComplete() {
     try {
       const res = await dbGet("log");
@@ -575,364 +607,254 @@ function RishiStrengthTracker() {
         setStreak(computeStreak(logArr));
         setBestStreak(computeBestStreak(logArr));
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+    }
   }
-
   useEffect(() => {
     if (!loading && allDone) markDayComplete();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allDone, loading]);
-
-  return (
-    <div style={{ background: COLORS.bg, minHeight: "100vh", color: COLORS.text, fontFamily: "ui-sans-serif, system-ui, sans-serif" }}>
-      <style>{`
+  return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.bg, minHeight: "100vh", color: COLORS.text, fontFamily: "ui-sans-serif, system-ui, sans-serif" } }, /* @__PURE__ */ React.createElement("style", null, `
         * { box-sizing: border-box; }
         button { font-family: inherit; cursor: pointer; }
         ::selection { background: ${COLORS.focus}; color: #171613; }
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
-      `}</style>
-
-      <div style={{ maxWidth: 480, margin: "0 auto", padding: "20px 16px 48px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: !isToday ? 10 : 4 }}>
-          <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, letterSpacing: "0.14em", color: COLORS.textMuted }}>
-            TRAINING PROGRAM · 6 DAY SPLIT
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <button onClick={() => firebase.auth().signOut()} style={{ background: "none", border: "none", color: COLORS.textMuted, fontSize: 10, fontFamily: "'IBM Plex Mono', monospace", textDecoration: "underline", padding: 0 }}>
-              sign out
-            </button>
-            <div style={{
-              fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.06em",
-              color: "#141310", background: COLORS.focus, borderRadius: 5, padding: "3px 9px", whiteSpace: "nowrap",
-            }}>RISHI</div>
-          </div>
-        </div>
-        {!isToday && (
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
-            background: hexToRgba(COLORS.focus, 0.12), border: `1px solid ${hexToRgba(COLORS.focus, 0.5)}`,
-            borderRadius: 8, padding: "8px 12px", marginBottom: 14,
-          }}>
-            <span style={{ fontSize: 12.5, color: COLORS.focus, fontFamily: "'IBM Plex Mono', monospace" }}>
-              Viewing {new Date(dateKey + "T00:00:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}
-            </span>
-            <button onClick={backToToday} style={{ background: "transparent", border: `1px solid ${COLORS.focus}`, borderRadius: 5, color: COLORS.focus, fontSize: 11.5, padding: "4px 10px", fontFamily: "'IBM Plex Mono', monospace" }}>
-              Back to today
-            </button>
-          </div>
-        )}
-        <div style={{ marginBottom: 18 }}>
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-            <h1 style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 26, margin: 0, textTransform: "uppercase" }}>
-              {day.label} · {workout.name}
-            </h1>
-            {streak > 0 && (
-              <div style={{ display: "flex", alignItems: "center", gap: 4, color: COLORS.effort, fontFamily: "'IBM Plex Mono', monospace", fontSize: 13 }}>
-                <Flame size={14} /> {streak}
-              </div>
-            )}
-          </div>
-          <div style={{ color: CATEGORY_COLOR[workout.category], fontSize: 13, marginTop: 2, fontFamily: "'IBM Plex Mono', monospace" }}>
-            {CATEGORY_LABEL[workout.category].toUpperCase()}
-          </div>
-        </div>
-
-        <div style={{ display: "flex", gap: 5, marginBottom: 18 }}>
-          {SCHEDULE.map((d) => (
-            <button
-              key={d.id}
-              onClick={() => { setDayId(d.id); setOverrideDate(null); }}
-              style={{
-                flex: 1, padding: "9px 0", borderRadius: 6,
-                border: `1px solid ${d.id === effectiveDayId ? CATEGORY_COLOR[WORKOUTS[d.workout].category] : COLORS.line}`,
-                background: d.id === effectiveDayId ? CATEGORY_COLOR[WORKOUTS[d.workout].category] : "transparent",
-                color: d.id === effectiveDayId ? "#141310" : COLORS.textMuted,
-                fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.02em",
-              }}
-            >{d.label}</button>
-          ))}
-        </div>
-
-        <div style={{ display: "flex", gap: 6, marginBottom: 18 }}>
-          <button onClick={() => setView("today")} style={{
-            flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "8px 0",
-            border: "none", borderBottom: `2px solid ${view === "today" ? COLORS.text : "transparent"}`,
-            background: "transparent", color: view === "today" ? COLORS.text : COLORS.textMuted,
-            fontFamily: "'IBM Plex Mono', monospace", fontSize: 12, letterSpacing: "0.06em",
-          }}><ListChecks size={13} /> TODAY</button>
-          <button onClick={() => setView("history")} style={{
-            flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "8px 0",
-            border: "none", borderBottom: `2px solid ${view === "history" ? COLORS.text : "transparent"}`,
-            background: "transparent", color: view === "history" ? COLORS.text : COLORS.textMuted,
-            fontFamily: "'IBM Plex Mono', monospace", fontSize: 12, letterSpacing: "0.06em",
-          }}><CalendarDays size={13} /> HISTORY</button>
-        </div>
-
-        {view === "history" ? (
-          <HistoryView log={log} streak={streak} bestStreak={bestStreak} workout={workout} workoutKey={day.workout} onSelectDate={goToDate} />
-        ) : (
-          <>
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontFamily: "'IBM Plex Mono', monospace", color: COLORS.textMuted, marginBottom: 5 }}>
-                <span>TASKS DONE</span>
-                <span>{doneTasks} / {totalTasks}</span>
-              </div>
-              <div style={{ height: 8, background: COLORS.surface, borderRadius: 4, overflow: "hidden", border: `1px solid ${COLORS.line}` }}>
-                <div style={{ height: "100%", width: `${totalTasks ? (doneTasks / totalTasks) * 100 : 0}%`, background: allDone ? COLORS.go : COLORS.focus, transition: "width 0.3s ease" }} />
-              </div>
-              {allDone && (
-                <div style={{
-                  marginTop: 10, textAlign: "center", fontFamily: "'Oswald', sans-serif", fontWeight: 700,
-                  fontSize: 15, letterSpacing: "0.12em", color: COLORS.go, border: `2px solid ${COLORS.go}`,
-                  borderRadius: 6, padding: "6px 0", transform: "rotate(-1deg)",
-                }}>CHECK DAY COMPLETE</div>
-              )}
-            </div>
-
-            {workout.sections.map((sec) => {
-              const secColor = ROLE_COLORS[sectionRole(sec)];
-              const sectionKey = `${day.workout}:${sec.key}`;
-              const secExpanded = expandedId === sectionKey;
-              const doneCount = sec.type === "checklist" ? sec.items.filter((_, i) => checklist[`${sec.key}:${i}`]).length : 0;
-
-              if (sec.type === "checklist") {
-                return (
-                  <div key={sec.key} style={{ background: COLORS.surface, border: `1.5px solid ${hexToRgba(secColor, 0.55)}`, borderRadius: 8, padding: "12px 14px", marginBottom: 16 }}>
-                    <div onClick={() => toggleSection(sectionKey)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}>
-                      <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15, letterSpacing: "0.03em", color: secColor }}>
-                        {sec.title.toUpperCase()}
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11.5, color: COLORS.textMuted }}>{doneCount}/{sec.items.length}</span>
-                        {secExpanded ? <ChevronUp size={16} color={COLORS.textMuted} /> : <ChevronDown size={16} color={COLORS.textMuted} />}
-                      </div>
-                    </div>
-                    {secExpanded && (
-                      <div style={{ marginTop: 6 }}>
-                        {sec.items.map((label, i) => {
-                          const key = `${sec.key}:${i}`;
-                          const checked = !!checklist[key];
-                          return (
-                            <div key={i} onClick={() => toggleItem(sec.key, i)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderTop: `1px solid ${COLORS.line}` }}>
-                              <div style={{
-                                width: 18, height: 18, minWidth: 18, borderRadius: 4, border: `1.5px solid ${checked ? COLORS.go : COLORS.line}`,
-                                background: checked ? COLORS.go : "transparent", display: "flex", alignItems: "center", justifyContent: "center",
-                              }}>{checked && <Check size={12} color="#141310" strokeWidth={3} />}</div>
-                              <div style={{ flex: 1, fontSize: 13.5, color: checked ? COLORS.textMuted : COLORS.text, textDecoration: checked ? "line-through" : "none" }}>{label}</div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
+      `), /* @__PURE__ */ React.createElement("div", { style: { maxWidth: 480, margin: "0 auto", padding: "20px 16px 48px" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: !isToday ? 10 : 4 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, letterSpacing: "0.14em", color: COLORS.textMuted } }, "TRAINING PROGRAM \xB7 6 DAY SPLIT"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } }, /* @__PURE__ */ React.createElement("button", { onClick: () => firebase.auth().signOut(), style: { background: "none", border: "none", color: COLORS.textMuted, fontSize: 10, fontFamily: "'IBM Plex Mono', monospace", textDecoration: "underline", padding: 0 } }, "sign out"), /* @__PURE__ */ React.createElement("div", { style: {
+    fontFamily: "'Oswald', sans-serif",
+    fontWeight: 700,
+    fontSize: 12,
+    letterSpacing: "0.06em",
+    color: "#141310",
+    background: COLORS.focus,
+    borderRadius: 5,
+    padding: "3px 9px",
+    whiteSpace: "nowrap"
+  } }, "RISHI"))), !isToday && /* @__PURE__ */ React.createElement("div", { style: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 8,
+    background: hexToRgba(COLORS.focus, 0.12),
+    border: `1px solid ${hexToRgba(COLORS.focus, 0.5)}`,
+    borderRadius: 8,
+    padding: "8px 12px",
+    marginBottom: 14
+  } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12.5, color: COLORS.focus, fontFamily: "'IBM Plex Mono', monospace" } }, "Viewing ", (/* @__PURE__ */ new Date(dateKey + "T00:00:00")).toLocaleDateString(void 0, { weekday: "short", month: "short", day: "numeric" })), /* @__PURE__ */ React.createElement("button", { onClick: backToToday, style: { background: "transparent", border: `1px solid ${COLORS.focus}`, borderRadius: 5, color: COLORS.focus, fontSize: 11.5, padding: "4px 10px", fontFamily: "'IBM Plex Mono', monospace" } }, "Back to today")), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "baseline", justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("h1", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 26, margin: 0, textTransform: "uppercase" } }, day.label, " \xB7 ", workout.name), streak > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 4, color: COLORS.effort, fontFamily: "'IBM Plex Mono', monospace", fontSize: 13 } }, /* @__PURE__ */ React.createElement(Flame, { size: 14 }), " ", streak)), /* @__PURE__ */ React.createElement("div", { style: { color: CATEGORY_COLOR[workout.category], fontSize: 13, marginTop: 2, fontFamily: "'IBM Plex Mono', monospace" } }, CATEGORY_LABEL[workout.category].toUpperCase())), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 5, marginBottom: 18 } }, SCHEDULE.map((d) => /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      key: d.id,
+      onClick: () => {
+        setDayId(d.id);
+        setOverrideDate(null);
+      },
+      style: {
+        flex: 1,
+        padding: "9px 0",
+        borderRadius: 6,
+        border: `1px solid ${d.id === effectiveDayId ? CATEGORY_COLOR[WORKOUTS[d.workout].category] : COLORS.line}`,
+        background: d.id === effectiveDayId ? CATEGORY_COLOR[WORKOUTS[d.workout].category] : "transparent",
+        color: d.id === effectiveDayId ? "#141310" : COLORS.textMuted,
+        fontFamily: "'Oswald', sans-serif",
+        fontWeight: 600,
+        fontSize: 13,
+        letterSpacing: "0.02em"
+      }
+    },
+    d.label
+  ))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setView("today"), style: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    padding: "8px 0",
+    border: "none",
+    borderBottom: `2px solid ${view === "today" ? COLORS.text : "transparent"}`,
+    background: "transparent",
+    color: view === "today" ? COLORS.text : COLORS.textMuted,
+    fontFamily: "'IBM Plex Mono', monospace",
+    fontSize: 12,
+    letterSpacing: "0.06em"
+  } }, /* @__PURE__ */ React.createElement(ListChecks, { size: 13 }), " TODAY"), /* @__PURE__ */ React.createElement("button", { onClick: () => setView("history"), style: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    padding: "8px 0",
+    border: "none",
+    borderBottom: `2px solid ${view === "history" ? COLORS.text : "transparent"}`,
+    background: "transparent",
+    color: view === "history" ? COLORS.text : COLORS.textMuted,
+    fontFamily: "'IBM Plex Mono', monospace",
+    fontSize: 12,
+    letterSpacing: "0.06em"
+  } }, /* @__PURE__ */ React.createElement(CalendarDays, { size: 13 }), " HISTORY")), view === "history" ? /* @__PURE__ */ React.createElement(HistoryView, { log, streak, bestStreak, workout, workoutKey: day.workout, onSelectDate: goToDate }) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 11, fontFamily: "'IBM Plex Mono', monospace", color: COLORS.textMuted, marginBottom: 5 } }, /* @__PURE__ */ React.createElement("span", null, "TASKS DONE"), /* @__PURE__ */ React.createElement("span", null, doneTasks, " / ", totalTasks)), /* @__PURE__ */ React.createElement("div", { style: { height: 8, background: COLORS.surface, borderRadius: 4, overflow: "hidden", border: `1px solid ${COLORS.line}` } }, /* @__PURE__ */ React.createElement("div", { style: { height: "100%", width: `${totalTasks ? doneTasks / totalTasks * 100 : 0}%`, background: allDone ? COLORS.go : COLORS.focus, transition: "width 0.3s ease" } })), allDone && /* @__PURE__ */ React.createElement("div", { style: {
+    marginTop: 10,
+    textAlign: "center",
+    fontFamily: "'Oswald', sans-serif",
+    fontWeight: 700,
+    fontSize: 15,
+    letterSpacing: "0.12em",
+    color: COLORS.go,
+    border: `2px solid ${COLORS.go}`,
+    borderRadius: 6,
+    padding: "6px 0",
+    transform: "rotate(-1deg)"
+  } }, "CHECK DAY COMPLETE")), workout.sections.map((sec) => {
+    const secColor = ROLE_COLORS[sectionRole(sec)];
+    const sectionKey = `${day.workout}:${sec.key}`;
+    const secExpanded = expandedId === sectionKey;
+    const doneCount = sec.type === "checklist" ? sec.items.filter((_, i) => checklist[`${sec.key}:${i}`]).length : 0;
+    if (sec.type === "checklist") {
+      return /* @__PURE__ */ React.createElement("div", { key: sec.key, style: { background: COLORS.surface, border: `1.5px solid ${hexToRgba(secColor, 0.55)}`, borderRadius: 8, padding: "12px 14px", marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { onClick: () => toggleSection(sectionKey), style: { display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15, letterSpacing: "0.03em", color: secColor } }, sec.title.toUpperCase()), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6 } }, /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 11.5, color: COLORS.textMuted } }, doneCount, "/", sec.items.length), secExpanded ? /* @__PURE__ */ React.createElement(ChevronUp, { size: 16, color: COLORS.textMuted }) : /* @__PURE__ */ React.createElement(ChevronDown, { size: 16, color: COLORS.textMuted }))), secExpanded && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 6 } }, sec.items.map((label, i) => {
+        const key = `${sec.key}:${i}`;
+        const checked = !!checklist[key];
+        return /* @__PURE__ */ React.createElement("div", { key: i, onClick: () => toggleItem(sec.key, i), style: { display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderTop: `1px solid ${COLORS.line}` } }, /* @__PURE__ */ React.createElement("div", { style: {
+          width: 18,
+          height: 18,
+          minWidth: 18,
+          borderRadius: 4,
+          border: `1.5px solid ${checked ? COLORS.go : COLORS.line}`,
+          background: checked ? COLORS.go : "transparent",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        } }, checked && /* @__PURE__ */ React.createElement(Check, { size: 12, color: "#141310", strokeWidth: 3 })), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, fontSize: 13.5, color: checked ? COLORS.textMuted : COLORS.text, textDecoration: checked ? "line-through" : "none" } }, label));
+      })));
+    }
+    return /* @__PURE__ */ React.createElement("div", { key: sec.key, style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15, letterSpacing: "0.03em", marginBottom: 8, color: secColor } }, sec.title.toUpperCase()), sec.exercises.map((ex) => {
+      const mode = ex.mode || "weight";
+      const vals = setsData[ex.id] || [];
+      const lastVals = lastSets[ex.id] || [];
+      const hasLast = lastVals.some((v) => isLogged(mode, v));
+      const best = mergeBest(mode, bestWeek[ex.id], bestFromArray(mode, vals));
+      const exColor = ROLE_COLORS[sectionRole(sec)];
+      const expanded = expandedId === ex.id;
+      return /* @__PURE__ */ React.createElement("div", { key: ex.id, style: { background: COLORS.surface, border: `1px solid ${hexToRgba(exColor, 0.35)}`, borderLeftWidth: 3, borderLeftColor: exColor, borderRadius: 8, marginBottom: 10, padding: 14 } }, /* @__PURE__ */ React.createElement("div", { onClick: () => toggleCard(ex.id), style: { cursor: "pointer" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15 } }, ex.name), expanded ? /* @__PURE__ */ React.createElement(ChevronUp, { size: 16, color: COLORS.textMuted, style: { flexShrink: 0, marginTop: 2 } }) : /* @__PURE__ */ React.createElement(ChevronDown, { size: 16, color: COLORS.textMuted, style: { flexShrink: 0, marginTop: 2 } })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4, gap: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12.5, color: COLORS.textMuted } }, sec.sets, " ", sec.sets === 1 ? "set" : "sets"), /* @__PURE__ */ React.createElement("div", { style: {
+        fontSize: 11,
+        fontFamily: "'IBM Plex Mono', monospace",
+        color: exColor,
+        whiteSpace: "nowrap",
+        background: hexToRgba(exColor, 0.14),
+        border: `1px solid ${hexToRgba(exColor, 0.6)}`,
+        borderRadius: 5,
+        padding: "3px 8px"
+      } }, bestLabel(mode, best)))), expanded && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11.5, color: COLORS.textMuted, marginBottom: 6 } }, mode === "weight" && "Reps and weight", mode === "time" && "Hold time", mode === "minutes" && "Duration"), mode === "time" && (() => {
+        const sw = stopwatches[ex.id] || { running: false, accumulated: 0 };
+        const elapsed = stopwatchElapsedSec(ex.id);
+        const mm = Math.floor(elapsed / 60), ss = elapsed % 60;
+        return /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10, background: COLORS.surfaceAlt, border: `1px solid ${COLORS.line}`, borderRadius: 6, padding: "8px 10px", marginBottom: 8 } }, /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600, color: sw.running ? COLORS.go : COLORS.text, minWidth: 46 } }, mm, ":", String(ss).padStart(2, "0")), /* @__PURE__ */ React.createElement("button", { onClick: () => toggleStopwatch(ex.id), style: { background: "transparent", border: `1px solid ${sw.running ? COLORS.effort : COLORS.go}`, color: sw.running ? COLORS.effort : COLORS.go, borderRadius: 5, padding: "5px 12px", fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" } }, sw.running ? "Pause" : "Start"), /* @__PURE__ */ React.createElement("button", { onClick: () => resetStopwatch(ex.id), style: { background: "transparent", border: `1px solid ${COLORS.line}`, color: COLORS.textMuted, borderRadius: 5, padding: "5px 12px", fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" } }, "Reset"), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 9.5, color: COLORS.line, fontFamily: "'IBM Plex Mono', monospace", marginLeft: "auto", textAlign: "right" } }, "not saved"));
+      })(), hasLast && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11.5, color: CATEGORY_COLOR[workout.category], marginBottom: 6, fontFamily: "'IBM Plex Mono', monospace" } }, "Last time: ", lastVals.map((v) => summaryLabel(mode, v)).join(" \xB7 ")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } }, Array.from({ length: sec.sets }).map((_, i) => {
+        const val = vals[i];
+        const active = isLogged(mode, val);
+        const lastVal = lastVals[i];
+        return /* @__PURE__ */ React.createElement("div", { key: i, style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          borderRadius: 6,
+          border: `1.5px solid ${active ? COLORS.go : COLORS.line}`,
+          background: active ? "rgba(124,148,115,0.12)" : "transparent",
+          padding: "8px 10px"
+        } }, sec.sets > 1 && /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: COLORS.textMuted, minWidth: 34 } }, "SET ", i + 1), mode === "weight" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 4 } }, /* @__PURE__ */ React.createElement("button", { onClick: () => updateSet(ex.id, i, { r: Math.max(0, ((val == null ? void 0 : val.r) || 0) - 1) }), "aria-label": `Decrease reps for set ${i + 1}`, style: { width: 30, height: 30, borderRadius: 6, border: `1px solid ${COLORS.line}`, background: "transparent", color: COLORS.textMuted, fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 } }, "\u2212"), /* @__PURE__ */ React.createElement(
+          "input",
+          {
+            type: "number",
+            inputMode: "numeric",
+            min: "0",
+            value: (val == null ? void 0 : val.r) === void 0 ? "" : val.r,
+            placeholder: (lastVal == null ? void 0 : lastVal.r) !== void 0 ? String(lastVal.r) : "0",
+            onFocus: (e) => e.target.select(),
+            onChange: (e) => {
+              const raw = e.target.value;
+              const n = raw === "" ? 0 : parseInt(raw, 10);
+              if (!Number.isNaN(n)) updateSet(ex.id, i, { r: Math.max(0, n) });
+            },
+            "aria-label": `Reps for set ${i + 1}`,
+            style: { width: 32, textAlign: "center", background: "transparent", border: "none", outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 600, color: active ? COLORS.go : COLORS.text, padding: "6px 0" }
+          }
+        ), /* @__PURE__ */ React.createElement("button", { onClick: () => updateSet(ex.id, i, { r: ((val == null ? void 0 : val.r) || 0) + 1 }), "aria-label": `Increase reps for set ${i + 1}`, style: { width: 30, height: 30, borderRadius: 6, border: `1px solid ${COLORS.go}`, background: "transparent", color: COLORS.go, fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 } }, "+"), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" } }, "reps")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5, marginLeft: "auto", borderLeft: `1px solid ${COLORS.line}`, paddingLeft: 12 } }, /* @__PURE__ */ React.createElement(
+          "input",
+          {
+            type: "number",
+            inputMode: "numeric",
+            min: "0",
+            value: (val == null ? void 0 : val.w) === void 0 ? "" : val.w,
+            placeholder: (lastVal == null ? void 0 : lastVal.w) !== void 0 ? String(lastVal.w) : "0",
+            onFocus: (e) => e.target.select(),
+            onChange: (e) => {
+              const raw = e.target.value;
+              const n = raw === "" ? 0 : parseInt(raw, 10);
+              if (!Number.isNaN(n)) updateSet(ex.id, i, { w: Math.max(0, n) });
+            },
+            "aria-label": `Weight for set ${i + 1}`,
+            style: { width: 52, textAlign: "center", background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 14, fontWeight: 600, color: COLORS.text, padding: "7px 0" }
+          }
+        ), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" } }, "lbs"))), mode === "time" && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 4, marginLeft: sec.sets > 1 ? 0 : "auto" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(
+          "input",
+          {
+            type: "number",
+            inputMode: "numeric",
+            min: "0",
+            value: (val == null ? void 0 : val.m) === void 0 ? "" : val.m,
+            placeholder: (lastVal == null ? void 0 : lastVal.m) !== void 0 ? String(lastVal.m) : "0",
+            onFocus: (e) => e.target.select(),
+            onChange: (e) => {
+              const raw = e.target.value;
+              const n = raw === "" ? 0 : parseInt(raw, 10);
+              if (!Number.isNaN(n)) updateSet(ex.id, i, { m: Math.max(0, n) });
+            },
+            "aria-label": `Minutes for set ${i + 1}`,
+            style: { width: 40, textAlign: "center", background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 600, color: active ? COLORS.go : COLORS.text, padding: "7px 0" }
+          }
+        ), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginTop: 1, textAlign: "center" } }, "m")), /* @__PURE__ */ React.createElement("span", { style: { color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" } }, ":"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(
+          "input",
+          {
+            type: "number",
+            inputMode: "numeric",
+            min: "0",
+            max: "59",
+            value: (val == null ? void 0 : val.s) === void 0 ? "" : val.s,
+            placeholder: (lastVal == null ? void 0 : lastVal.s) !== void 0 ? String(lastVal.s) : "00",
+            onFocus: (e) => e.target.select(),
+            onChange: (e) => {
+              const raw = e.target.value;
+              let n = raw === "" ? 0 : parseInt(raw, 10);
+              if (!Number.isNaN(n)) {
+                n = Math.max(0, Math.min(59, n));
+                updateSet(ex.id, i, { s: n });
               }
-
-              return (
-                <div key={sec.key} style={{ marginBottom: 16 }}>
-                  <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15, letterSpacing: "0.03em", marginBottom: 8, color: secColor }}>
-                    {sec.title.toUpperCase()}
-                  </div>
-                  {
-                    sec.exercises.map((ex) => {
-                      const mode = ex.mode || "weight";
-                      const vals = setsData[ex.id] || [];
-                      const lastVals = lastSets[ex.id] || [];
-                      const hasLast = lastVals.some((v) => isLogged(mode, v));
-                      const best = mergeBest(mode, bestWeek[ex.id], bestFromArray(mode, vals));
-                      const exColor = ROLE_COLORS[sectionRole(sec)];
-                      const expanded = expandedId === ex.id;
-                      return (
-                        <div key={ex.id} style={{ background: COLORS.surface, border: `1px solid ${hexToRgba(exColor, 0.35)}`, borderLeftWidth: 3, borderLeftColor: exColor, borderRadius: 8, marginBottom: 10, padding: 14 }}>
-                          <div onClick={() => toggleCard(ex.id)} style={{ cursor: "pointer" }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-                              <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15 }}>{ex.name}</div>
-                              {expanded ? <ChevronUp size={16} color={COLORS.textMuted} style={{ flexShrink: 0, marginTop: 2 }} /> : <ChevronDown size={16} color={COLORS.textMuted} style={{ flexShrink: 0, marginTop: 2 }} />}
-                            </div>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4, gap: 8 }}>
-                              <div style={{ fontSize: 12.5, color: COLORS.textMuted }}>
-                                {sec.sets} {sec.sets === 1 ? "set" : "sets"}
-                              </div>
-                              <div style={{
-                                fontSize: 11, fontFamily: "'IBM Plex Mono', monospace", color: exColor, whiteSpace: "nowrap",
-                                background: hexToRgba(exColor, 0.14), border: `1px solid ${hexToRgba(exColor, 0.6)}`, borderRadius: 5, padding: "3px 8px",
-                              }}>
-                                {bestLabel(mode, best)}
-                              </div>
-                            </div>
-                          </div>
-                          {expanded && (
-                            <div style={{ marginTop: 8 }}>
-                              <div style={{ fontSize: 11.5, color: COLORS.textMuted, marginBottom: 6 }}>
-                                {mode === "weight" && "Reps and weight"}
-                                {mode === "time" && "Hold time"}
-                                {mode === "minutes" && "Duration"}
-                              </div>
-                              {mode === "time" && (() => {
-                                const sw = stopwatches[ex.id] || { running: false, accumulated: 0 };
-                                const elapsed = stopwatchElapsedSec(ex.id);
-                                const mm = Math.floor(elapsed / 60), ss = elapsed % 60;
-                                return (
-                                  <div style={{ display: "flex", alignItems: "center", gap: 10, background: COLORS.surfaceAlt, border: `1px solid ${COLORS.line}`, borderRadius: 6, padding: "8px 10px", marginBottom: 8 }}>
-                                    <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600, color: sw.running ? COLORS.go : COLORS.text, minWidth: 46 }}>
-                                      {mm}:{String(ss).padStart(2, "0")}
-                                    </span>
-                                    <button onClick={() => toggleStopwatch(ex.id)} style={{ background: "transparent", border: `1px solid ${sw.running ? COLORS.effort : COLORS.go}`, color: sw.running ? COLORS.effort : COLORS.go, borderRadius: 5, padding: "5px 12px", fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }}>
-                                      {sw.running ? "Pause" : "Start"}
-                                    </button>
-                                    <button onClick={() => resetStopwatch(ex.id)} style={{ background: "transparent", border: `1px solid ${COLORS.line}`, color: COLORS.textMuted, borderRadius: 5, padding: "5px 12px", fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }}>
-                                      Reset
-                                    </button>
-                                    <span style={{ fontSize: 9.5, color: COLORS.line, fontFamily: "'IBM Plex Mono', monospace", marginLeft: "auto", textAlign: "right" }}>not saved</span>
-                                  </div>
-                                );
-                              })()}
-                              {hasLast && (
-                                <div style={{ fontSize: 11.5, color: CATEGORY_COLOR[workout.category], marginBottom: 6, fontFamily: "'IBM Plex Mono', monospace" }}>
-                                  Last time: {lastVals.map((v) => summaryLabel(mode, v)).join(" · ")}
-                                </div>
-                              )}
-                          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                            {Array.from({ length: sec.sets }).map((_, i) => {
-                              const val = vals[i];
-                              const active = isLogged(mode, val);
-                              const lastVal = lastVals[i];
-                              return (
-                                <div key={i} style={{
-                                  display: "flex", alignItems: "center", gap: 12, borderRadius: 6, border: `1.5px solid ${active ? COLORS.go : COLORS.line}`,
-                                  background: active ? "rgba(124,148,115,0.12)" : "transparent", padding: "8px 10px",
-                                }}>
-                                  {sec.sets > 1 && (
-                                    <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: COLORS.textMuted, minWidth: 34 }}>SET {i + 1}</div>
-                                  )}
-
-                                  {mode === "weight" && (
-                                    <>
-                                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                                        <button onClick={() => updateSet(ex.id, i, { r: Math.max(0, (val?.r || 0) - 1) })} aria-label={`Decrease reps for set ${i + 1}`} style={{ width: 30, height: 30, borderRadius: 6, border: `1px solid ${COLORS.line}`, background: "transparent", color: COLORS.textMuted, fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>−</button>
-                                        <input
-                                          type="number" inputMode="numeric" min="0"
-                                          value={val?.r === undefined ? "" : val.r}
-                                          placeholder={lastVal?.r !== undefined ? String(lastVal.r) : "0"}
-                                          onFocus={(e) => e.target.select()}
-                                          onChange={(e) => {
-                                            const raw = e.target.value;
-                                            const n = raw === "" ? 0 : parseInt(raw, 10);
-                                            if (!Number.isNaN(n)) updateSet(ex.id, i, { r: Math.max(0, n) });
-                                          }}
-                                          aria-label={`Reps for set ${i + 1}`}
-                                          style={{ width: 32, textAlign: "center", background: "transparent", border: "none", outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 600, color: active ? COLORS.go : COLORS.text, padding: "6px 0" }}
-                                        />
-                                        <button onClick={() => updateSet(ex.id, i, { r: (val?.r || 0) + 1 })} aria-label={`Increase reps for set ${i + 1}`} style={{ width: 30, height: 30, borderRadius: 6, border: `1px solid ${COLORS.go}`, background: "transparent", color: COLORS.go, fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>+</button>
-                                        <span style={{ fontSize: 11, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>reps</span>
-                                      </div>
-                                      <div style={{ display: "flex", alignItems: "center", gap: 5, marginLeft: "auto", borderLeft: `1px solid ${COLORS.line}`, paddingLeft: 12 }}>
-                                        <input
-                                          type="number" inputMode="numeric" min="0"
-                                          value={val?.w === undefined ? "" : val.w}
-                                          placeholder={lastVal?.w !== undefined ? String(lastVal.w) : "0"}
-                                          onFocus={(e) => e.target.select()}
-                                          onChange={(e) => {
-                                            const raw = e.target.value;
-                                            const n = raw === "" ? 0 : parseInt(raw, 10);
-                                            if (!Number.isNaN(n)) updateSet(ex.id, i, { w: Math.max(0, n) });
-                                          }}
-                                          aria-label={`Weight for set ${i + 1}`}
-                                          style={{ width: 52, textAlign: "center", background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 14, fontWeight: 600, color: COLORS.text, padding: "7px 0" }}
-                                        />
-                                        <span style={{ fontSize: 11, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>lbs</span>
-                                      </div>
-                                    </>
-                                  )}
-
-                                  {mode === "time" && (
-                                    <div style={{ display: "flex", alignItems: "center", gap: 4, marginLeft: sec.sets > 1 ? 0 : "auto" }}>
-                                      <div>
-                                        <input
-                                          type="number" inputMode="numeric" min="0"
-                                          value={val?.m === undefined ? "" : val.m}
-                                          placeholder={lastVal?.m !== undefined ? String(lastVal.m) : "0"}
-                                          onFocus={(e) => e.target.select()}
-                                          onChange={(e) => {
-                                            const raw = e.target.value;
-                                            const n = raw === "" ? 0 : parseInt(raw, 10);
-                                            if (!Number.isNaN(n)) updateSet(ex.id, i, { m: Math.max(0, n) });
-                                          }}
-                                          aria-label={`Minutes for set ${i + 1}`}
-                                          style={{ width: 40, textAlign: "center", background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 600, color: active ? COLORS.go : COLORS.text, padding: "7px 0" }}
-                                        />
-                                        <div style={{ fontSize: 11, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginTop: 1, textAlign: "center" }}>m</div>
-                                      </div>
-                                      <span style={{ color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>:</span>
-                                      <div>
-                                        <input
-                                          type="number" inputMode="numeric" min="0" max="59"
-                                          value={val?.s === undefined ? "" : val.s}
-                                          placeholder={lastVal?.s !== undefined ? String(lastVal.s) : "00"}
-                                          onFocus={(e) => e.target.select()}
-                                          onChange={(e) => {
-                                            const raw = e.target.value;
-                                            let n = raw === "" ? 0 : parseInt(raw, 10);
-                                            if (!Number.isNaN(n)) { n = Math.max(0, Math.min(59, n)); updateSet(ex.id, i, { s: n }); }
-                                          }}
-                                          aria-label={`Seconds for set ${i + 1}`}
-                                          style={{ width: 40, textAlign: "center", background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 600, color: active ? COLORS.go : COLORS.text, padding: "7px 0" }}
-                                        />
-                                        <div style={{ fontSize: 11, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginTop: 1, textAlign: "center" }}>s</div>
-                                      </div>
-                                    </div>
-                                  )}
-
-                                  {mode === "minutes" && (
-                                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }}>
-                                      <button onClick={() => updateSet(ex.id, i, { min: Math.max(0, (val?.min || 0) - 1) })} aria-label="Decrease minutes" style={{ width: 34, height: 34, borderRadius: 6, border: `1px solid ${COLORS.line}`, background: "transparent", color: COLORS.textMuted, fontSize: 17, display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>−</button>
-                                      <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
-                                        <input
-                                          type="number" inputMode="numeric" min="0"
-                                          value={val?.min === undefined ? "" : val.min}
-                                          placeholder={lastVal?.min !== undefined ? String(lastVal.min) : "0"}
-                                          onFocus={(e) => e.target.select()}
-                                          onChange={(e) => {
-                                            const raw = e.target.value;
-                                            const n = raw === "" ? 0 : parseInt(raw, 10);
-                                            if (!Number.isNaN(n)) updateSet(ex.id, i, { min: Math.max(0, n) });
-                                          }}
-                                          aria-label="Minutes"
-                                          style={{ width: 44, textAlign: "center", background: "transparent", border: "none", outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600, color: active ? COLORS.go : COLORS.text, padding: "6px 0" }}
-                                        />
-                                        <span style={{ fontSize: 12, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>min</span>
-                                      </div>
-                                      <button onClick={() => updateSet(ex.id, i, { min: (val?.min || 0) + 1 })} aria-label="Increase minutes" style={{ width: 34, height: 34, borderRadius: 6, border: `1px solid ${COLORS.go}`, background: "transparent", color: COLORS.go, fontSize: 17, display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>+</button>
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })
-                  }
-                </div>
-              );
-            })}
-          </>
-        )}
-
-        <div style={{ textAlign: "center", fontSize: 11, color: COLORS.line, marginTop: 20, fontFamily: "'IBM Plex Mono', monospace" }}>
-          synced to your cloud backup
-        </div>
-      </div>
-    </div>
-  );
+            },
+            "aria-label": `Seconds for set ${i + 1}`,
+            style: { width: 40, textAlign: "center", background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 600, color: active ? COLORS.go : COLORS.text, padding: "7px 0" }
+          }
+        ), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginTop: 1, textAlign: "center" } }, "s"))), mode === "minutes" && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" } }, /* @__PURE__ */ React.createElement("button", { onClick: () => updateSet(ex.id, i, { min: Math.max(0, ((val == null ? void 0 : val.min) || 0) - 1) }), "aria-label": "Decrease minutes", style: { width: 34, height: 34, borderRadius: 6, border: `1px solid ${COLORS.line}`, background: "transparent", color: COLORS.textMuted, fontSize: 17, display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 } }, "\u2212"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "baseline", gap: 5 } }, /* @__PURE__ */ React.createElement(
+          "input",
+          {
+            type: "number",
+            inputMode: "numeric",
+            min: "0",
+            value: (val == null ? void 0 : val.min) === void 0 ? "" : val.min,
+            placeholder: (lastVal == null ? void 0 : lastVal.min) !== void 0 ? String(lastVal.min) : "0",
+            onFocus: (e) => e.target.select(),
+            onChange: (e) => {
+              const raw = e.target.value;
+              const n = raw === "" ? 0 : parseInt(raw, 10);
+              if (!Number.isNaN(n)) updateSet(ex.id, i, { min: Math.max(0, n) });
+            },
+            "aria-label": "Minutes",
+            style: { width: 44, textAlign: "center", background: "transparent", border: "none", outline: "none", fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600, color: active ? COLORS.go : COLORS.text, padding: "6px 0" }
+          }
+        ), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" } }, "min")), /* @__PURE__ */ React.createElement("button", { onClick: () => updateSet(ex.id, i, { min: ((val == null ? void 0 : val.min) || 0) + 1 }), "aria-label": "Increase minutes", style: { width: 34, height: 34, borderRadius: 6, border: `1px solid ${COLORS.go}`, background: "transparent", color: COLORS.go, fontSize: 17, display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 } }, "+")));
+      }))));
+    }));
+  })), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", fontSize: 11, color: COLORS.line, marginTop: 20, fontFamily: "'IBM Plex Mono', monospace" } }, "synced to your cloud backup")));
 }
-
 function HistoryView({ log, streak, bestStreak, workout, workoutKey, onSelectDate }) {
-  const now = new Date();
+  const now = /* @__PURE__ */ new Date();
   const [monthOffset, setMonthOffset] = useState(0);
   const viewDate = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
   const year = viewDate.getFullYear();
@@ -940,14 +862,13 @@ function HistoryView({ log, streak, bestStreak, workout, workoutKey, onSelectDat
   const grid = monthGrid(year, month);
   const isCurrentMonth = monthOffset === 0;
   const todayStr = todayKey();
-
   const logMap = {};
-  log.forEach((l) => { logMap[l.date] = l.workout; });
+  log.forEach((l) => {
+    logMap[l.date] = l.workout;
+  });
   const totalSessions = log.length;
-
   const [repHistory, setRepHistory] = useState(null);
   const setExercises = workout.sections.filter((s) => s.type === "sets").flatMap((s) => s.exercises);
-
   useEffect(() => {
     let cancelled = false;
     async function loadReps() {
@@ -955,7 +876,7 @@ function HistoryView({ log, streak, bestStreak, workout, workoutKey, onSelectDat
         const neededByExercise = {};
         setExercises.forEach((ex) => {
           const wks = EXERCISE_WORKOUTS[ex.id] || [workoutKey];
-          const entries = log.filter((l) => wks.includes(l.workout)).sort((a, b) => (a.date < b.date ? -1 : 1)).slice(-10);
+          const entries = log.filter((l) => wks.includes(l.workout)).sort((a, b) => a.date < b.date ? -1 : 1).slice(-10);
           neededByExercise[ex.id] = entries;
         });
         const allEntries = Object.values(neededByExercise).flat();
@@ -967,7 +888,6 @@ function HistoryView({ log, streak, bestStreak, workout, workoutKey, onSelectDat
           const r = results[idx];
           blobByKey[k] = r.status === "fulfilled" && r.value ? JSON.parse(r.value.value) : {};
         });
-
         const byExercise = {};
         setExercises.forEach((ex) => {
           const mode = ex.mode || "weight";
@@ -981,120 +901,83 @@ function HistoryView({ log, streak, bestStreak, workout, workoutKey, onSelectDat
           });
         });
         setRepHistory(byExercise);
-      } catch (e) { console.error(e); if (!cancelled) setRepHistory({}); }
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) setRepHistory({});
+      }
     }
-    if (log.length) loadReps(); else setRepHistory({});
-    return () => { cancelled = true; };
+    if (log.length) loadReps();
+    else setRepHistory({});
+    return () => {
+      cancelled = true;
+    };
   }, [log, workoutKey, workout]);
-
-  return (
-    <div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
-        {[
-          { label: "SESSIONS", value: totalSessions, icon: null },
-          { label: "STREAK", value: streak, icon: <Flame size={13} color={COLORS.effort} /> },
-          { label: "BEST", value: bestStreak, icon: <Trophy size={13} color={COLORS.focus} /> },
-        ].map((s) => (
-          <div key={s.label} style={{ flex: 1, background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: "10px 8px", textAlign: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 20 }}>{s.icon}{s.value}</div>
-            <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 9.5, letterSpacing: "0.08em", color: COLORS.textMuted, marginTop: 2 }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14, marginBottom: 18 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-          <button onClick={() => setMonthOffset((o) => o - 1)} aria-label="Previous month" style={{ background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, padding: 4, color: COLORS.textMuted, display: "flex" }}><ChevronLeft size={15} /></button>
-          <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15, letterSpacing: "0.03em" }}>{MONTH_NAMES[month].toUpperCase()} {year}</div>
-          <button onClick={() => setMonthOffset((o) => Math.min(0, o + 1))} aria-label="Next month" disabled={isCurrentMonth} style={{ background: "transparent", border: `1px solid ${isCurrentMonth ? COLORS.surfaceAlt : COLORS.line}`, borderRadius: 5, padding: 4, color: isCurrentMonth ? COLORS.line : COLORS.textMuted, display: "flex" }}><ChevronRight size={15} /></button>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 5, marginBottom: 4 }}>
-          {WEEKDAY_LETTERS.map((l, i) => <div key={i} style={{ textAlign: "center", fontSize: 9.5, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>{l}</div>)}
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 5 }}>
-          {grid.map((g, i) => {
-            if (!g) return <div key={`blank-${i}`} />;
-            const w = logMap[g.key];
-            const trained = !!w;
-            const isToday = g.key === todayStr;
-            const isFuture = g.key > todayStr;
-            return (
-              <div
-                key={g.key}
-                title={g.key}
-                onClick={!isFuture ? () => onSelectDate(g.key) : undefined}
-                style={{
-                  aspectRatio: "1", borderRadius: 4,
-                  background: trained ? CATEGORY_COLOR[WORKOUTS[w].category] : COLORS.surfaceAlt,
-                  border: isToday ? `1.5px solid ${COLORS.text}` : `1px solid ${COLORS.line}`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 9, fontFamily: "'IBM Plex Mono', monospace", color: trained ? "#141310" : COLORS.line,
-                  cursor: isFuture ? "default" : "pointer", opacity: isFuture ? 0.5 : 1,
-                }}
-              >{g.date}</div>
-            );
-          })}
-        </div>
-        <div style={{ display: "flex", gap: 12, marginTop: 10, fontSize: 10.5, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace", flexWrap: "wrap" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 5 }}><div style={{ width: 10, height: 10, borderRadius: 2, background: CATEGORY_COLOR.push }} /> Push</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 5 }}><div style={{ width: 10, height: 10, borderRadius: 2, background: CATEGORY_COLOR.pull }} /> Pull</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 5 }}><div style={{ width: 10, height: 10, borderRadius: 2, background: CATEGORY_COLOR.mobility }} /> Mobility</div>
-        </div>
-        <div style={{ fontSize: 10.5, color: COLORS.line, marginTop: 8, fontFamily: "'IBM Plex Mono', monospace" }}>tap any day to open its workout</div>
-      </div>
-
-      <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14 }}>
-        <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 14, letterSpacing: "0.03em", marginBottom: 4 }}>PROGRESS TRENDS · {workout.name.toUpperCase()}</div>
-        <div style={{ fontSize: 11, color: COLORS.textMuted, marginBottom: 12 }}>Reps, hold time, or duration per session, most recent on the right.</div>
-        {repHistory === null && <div style={{ fontSize: 12, color: COLORS.textMuted }}>Loading session history...</div>}
-        {repHistory !== null && setExercises.every((ex) => !repHistory[ex.id]?.length) && (
-          <div style={{ fontSize: 12, color: COLORS.textMuted }}>Log some sets to start seeing trends here.</div>
-        )}
-        {repHistory && setExercises.filter((ex) => repHistory[ex.id]?.length).map((ex) => {
-          const points = repHistory[ex.id].slice(-8);
-          const maxVal = Math.max(...points.map((p) => p.total), 1);
-          const latest = points[points.length - 1];
-          const first = points[0];
-          const trendUp = points.length > 1 && latest.total > first.total;
-          const exColor = ROLE_COLORS[EXERCISE_ROLE[ex.id]] || ROLE_COLORS.main;
-          return (
-            <div key={ex.id} style={{ marginBottom: 14 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5, gap: 8 }}>
-                <span style={{ fontSize: 13, borderLeft: `3px solid ${exColor}`, paddingLeft: 8 }}>{ex.name}</span>
-                <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: trendUp ? exColor : COLORS.textMuted, whiteSpace: "nowrap" }}>{latest.label} {trendUp ? "up" : ""}</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 34 }}>
-                {points.map((p, i) => (
-                  <div key={p.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }} title={`${p.date}: ${p.label}`}>
-                    <div style={{
-                      width: "100%", borderRadius: 2, height: `${Math.max(10, (p.total / maxVal) * 100)}%`,
-                      background: hexToRgba(exColor, i === points.length - 1 ? 0.85 : 0.3),
-                      border: `1px solid ${hexToRgba(exColor, i === points.length - 1 ? 1 : 0.5)}`,
-                    }} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+  return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 18 } }, [
+    { label: "SESSIONS", value: totalSessions, icon: null },
+    { label: "STREAK", value: streak, icon: /* @__PURE__ */ React.createElement(Flame, { size: 13, color: COLORS.effort }) },
+    { label: "BEST", value: bestStreak, icon: /* @__PURE__ */ React.createElement(Trophy, { size: 13, color: COLORS.focus }) }
+  ].map((s) => /* @__PURE__ */ React.createElement("div", { key: s.label, style: { flex: 1, background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: "10px 8px", textAlign: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 4, fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 20 } }, s.icon, s.value), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 9.5, letterSpacing: "0.08em", color: COLORS.textMuted, marginTop: 2 } }, s.label)))), /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14, marginBottom: 18 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setMonthOffset((o) => o - 1), "aria-label": "Previous month", style: { background: "transparent", border: `1px solid ${COLORS.line}`, borderRadius: 5, padding: 4, color: COLORS.textMuted, display: "flex" } }, /* @__PURE__ */ React.createElement(ChevronLeft, { size: 15 })), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15, letterSpacing: "0.03em" } }, MONTH_NAMES[month].toUpperCase(), " ", year), /* @__PURE__ */ React.createElement("button", { onClick: () => setMonthOffset((o) => Math.min(0, o + 1)), "aria-label": "Next month", disabled: isCurrentMonth, style: { background: "transparent", border: `1px solid ${isCurrentMonth ? COLORS.surfaceAlt : COLORS.line}`, borderRadius: 5, padding: 4, color: isCurrentMonth ? COLORS.line : COLORS.textMuted, display: "flex" } }, /* @__PURE__ */ React.createElement(ChevronRight, { size: 15 }))), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 5, marginBottom: 4 } }, WEEKDAY_LETTERS.map((l, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { textAlign: "center", fontSize: 9.5, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" } }, l))), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 5 } }, grid.map((g, i) => {
+    if (!g) return /* @__PURE__ */ React.createElement("div", { key: `blank-${i}` });
+    const w = logMap[g.key];
+    const trained = !!w;
+    const isToday = g.key === todayStr;
+    const isFuture = g.key > todayStr;
+    return /* @__PURE__ */ React.createElement(
+      "div",
+      {
+        key: g.key,
+        title: g.key,
+        onClick: !isFuture ? () => onSelectDate(g.key) : void 0,
+        style: {
+          aspectRatio: "1",
+          borderRadius: 4,
+          background: trained ? CATEGORY_COLOR[WORKOUTS[w].category] : COLORS.surfaceAlt,
+          border: isToday ? `1.5px solid ${COLORS.text}` : `1px solid ${COLORS.line}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 9,
+          fontFamily: "'IBM Plex Mono', monospace",
+          color: trained ? "#141310" : COLORS.line,
+          cursor: isFuture ? "default" : "pointer",
+          opacity: isFuture ? 0.5 : 1
+        }
+      },
+      g.date
+    );
+  })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 12, marginTop: 10, fontSize: 10.5, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace", flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 10, height: 10, borderRadius: 2, background: CATEGORY_COLOR.push } }), " Push"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 10, height: 10, borderRadius: 2, background: CATEGORY_COLOR.pull } }), " Pull"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 10, height: 10, borderRadius: 2, background: CATEGORY_COLOR.mobility } }), " Mobility")), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10.5, color: COLORS.line, marginTop: 8, fontFamily: "'IBM Plex Mono', monospace" } }, "tap any day to open its workout")), /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 8, padding: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 14, letterSpacing: "0.03em", marginBottom: 4 } }, "PROGRESS TRENDS \xB7 ", workout.name.toUpperCase()), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: COLORS.textMuted, marginBottom: 12 } }, "Reps, hold time, or duration per session, most recent on the right."), repHistory === null && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: COLORS.textMuted } }, "Loading session history..."), repHistory !== null && setExercises.every((ex) => {
+    var _a;
+    return !((_a = repHistory[ex.id]) == null ? void 0 : _a.length);
+  }) && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: COLORS.textMuted } }, "Log some sets to start seeing trends here."), repHistory && setExercises.filter((ex) => {
+    var _a;
+    return (_a = repHistory[ex.id]) == null ? void 0 : _a.length;
+  }).map((ex) => {
+    const points = repHistory[ex.id].slice(-8);
+    const maxVal = Math.max(...points.map((p) => p.total), 1);
+    const latest = points[points.length - 1];
+    const first = points[0];
+    const trendUp = points.length > 1 && latest.total > first.total;
+    const exColor = ROLE_COLORS[EXERCISE_ROLE[ex.id]] || ROLE_COLORS.main;
+    return /* @__PURE__ */ React.createElement("div", { key: ex.id, style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5, gap: 8 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 13, borderLeft: `3px solid ${exColor}`, paddingLeft: 8 } }, ex.name), /* @__PURE__ */ React.createElement("span", { style: { fontFamily: "'IBM Plex Mono', monospace", fontSize: 11, color: trendUp ? exColor : COLORS.textMuted, whiteSpace: "nowrap" } }, latest.label, " ", trendUp ? "up" : "")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "flex-end", gap: 4, height: 34 } }, points.map((p, i) => /* @__PURE__ */ React.createElement("div", { key: p.date, style: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }, title: `${p.date}: ${p.label}` }, /* @__PURE__ */ React.createElement("div", { style: {
+      width: "100%",
+      borderRadius: 2,
+      height: `${Math.max(10, p.total / maxVal * 100)}%`,
+      background: hexToRgba(exColor, i === points.length - 1 ? 0.85 : 0.3),
+      border: `1px solid ${hexToRgba(exColor, i === points.length - 1 ? 1 : 0.5)}`
+    } })))));
+  })));
 }
-
 function AuthGate() {
-  const [user, setUser] = useState(undefined); // undefined = checking, null = signed out, object = signed in
+  const [user, setUser] = useState(void 0);
   const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-
   useEffect(() => {
     const unsub = firebase.auth().onAuthStateChanged((u) => setUser(u));
     return unsub;
   }, []);
-
   async function submit(e) {
     e.preventDefault();
     setError("");
@@ -1111,42 +994,20 @@ function AuthGate() {
       setBusy(false);
     }
   }
-
-  if (user === undefined) {
-    return (
-      <div style={{ background: COLORS.bg, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace", fontSize: 13 }}>
-        Loading...
-      </div>
-    );
+  if (user === void 0) {
+    return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.bg, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace", fontSize: 13 } }, "Loading...");
   }
-
   if (!user) {
     const inputStyle = { width: "100%", padding: "11px 12px", marginBottom: 10, background: COLORS.surfaceAlt, border: `1px solid ${COLORS.line}`, borderRadius: 6, color: COLORS.text, fontSize: 14, boxSizing: "border-box", fontFamily: "ui-sans-serif, system-ui, sans-serif" };
-    return (
-      <div style={{ background: COLORS.bg, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: "ui-sans-serif, system-ui, sans-serif" }}>
-        <form onSubmit={submit} style={{ width: "100%", maxWidth: 340, background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 10, padding: 24 }}>
-          <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 22, color: COLORS.text, marginBottom: 2, textAlign: "center" }}>RISHI</div>
-          <div style={{ fontSize: 11, color: COLORS.textMuted, textAlign: "center", marginBottom: 22, fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.08em" }}>STRENGTH TRACKER</div>
-          <input type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
-          <input type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} />
-          {error && <div style={{ color: COLORS.effort, fontSize: 12, marginBottom: 10 }}>{error}</div>}
-          <button type="submit" disabled={busy} style={{ width: "100%", padding: "12px 0", background: COLORS.focus, border: "none", borderRadius: 6, color: "#141310", fontWeight: 700, fontFamily: "'Oswald', sans-serif", fontSize: 14, letterSpacing: "0.03em", marginBottom: 12 }}>
-            {busy ? "..." : mode === "signin" ? "SIGN IN" : "CREATE ACCOUNT"}
-          </button>
-          <div style={{ textAlign: "center" }}>
-            <button type="button" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); }} style={{ background: "none", border: "none", color: COLORS.textMuted, fontSize: 12, fontFamily: "'IBM Plex Mono', monospace", textDecoration: "underline" }}>
-              {mode === "signin" ? "Need an account? Sign up" : "Already have an account? Sign in"}
-            </button>
-          </div>
-        </form>
-      </div>
-    );
+    return /* @__PURE__ */ React.createElement("div", { style: { background: COLORS.bg, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: "ui-sans-serif, system-ui, sans-serif" } }, /* @__PURE__ */ React.createElement("form", { onSubmit: submit, style: { width: "100%", maxWidth: 340, background: COLORS.surface, border: `1px solid ${COLORS.line}`, borderRadius: 10, padding: 24 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 22, color: COLORS.text, marginBottom: 2, textAlign: "center" } }, "RISHI"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: COLORS.textMuted, textAlign: "center", marginBottom: 22, fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.08em" } }, "STRENGTH TRACKER"), /* @__PURE__ */ React.createElement("input", { type: "email", required: true, placeholder: "Email", value: email, onChange: (e) => setEmail(e.target.value), style: inputStyle }), /* @__PURE__ */ React.createElement("input", { type: "password", required: true, placeholder: "Password", value: password, onChange: (e) => setPassword(e.target.value), style: inputStyle }), error && /* @__PURE__ */ React.createElement("div", { style: { color: COLORS.effort, fontSize: 12, marginBottom: 10 } }, error), /* @__PURE__ */ React.createElement("button", { type: "submit", disabled: busy, style: { width: "100%", padding: "12px 0", background: COLORS.focus, border: "none", borderRadius: 6, color: "#141310", fontWeight: 700, fontFamily: "'Oswald', sans-serif", fontSize: 14, letterSpacing: "0.03em", marginBottom: 12 } }, busy ? "..." : mode === "signin" ? "SIGN IN" : "CREATE ACCOUNT"), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center" } }, /* @__PURE__ */ React.createElement("button", { type: "button", onClick: () => {
+      setMode(mode === "signin" ? "signup" : "signin");
+      setError("");
+    }, style: { background: "none", border: "none", color: COLORS.textMuted, fontSize: 12, fontFamily: "'IBM Plex Mono', monospace", textDecoration: "underline" } }, mode === "signin" ? "Need an account? Sign up" : "Already have an account? Sign in"))));
   }
-
-  return <RishiStrengthTracker />;
+  return /* @__PURE__ */ React.createElement(RishiStrengthTracker, null);
 }
+ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(AuthGate, null));
 
-ReactDOM.createRoot(document.getElementById("root")).render(<AuthGate />);
 </script>
 </body>
 </html>
